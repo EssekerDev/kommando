@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
-const themeScript = `(function(){try{var t=localStorage.getItem("kommando-theme");var d=t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.classList.toggle("dark",d);document.documentElement.style.colorScheme=d?"dark":"light";document.documentElement.style.background=d?"#000":"#F3F1EC";}catch(e){}})();`
+const themeScript = `(function(){try{var t=localStorage.getItem("kommando-theme");var d=matchMedia("(prefers-color-scheme: dark)").matches;if(t){d=t==="dark";}document.documentElement.classList.toggle("dark",d);var mode="light";var bg="#F3F1EC";if(d){mode="dark";bg="#000";}document.documentElement.style.colorScheme=mode;document.documentElement.style.background=bg;}catch(e){}})();`
 
 export const metadata: Metadata = {
   title: "Kommando — Allemand en 5 jours",
@@ -45,6 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
+        <meta name="kommando-build" content="20261021-goutte" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="min-h-full">{children}</body>

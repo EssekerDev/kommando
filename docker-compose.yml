@@ -7,6 +7,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        SOURCE_HASH: "20261021-goutte"
     image: kommando:local
     container_name: kommando-web
     init: true
@@ -29,7 +31,7 @@ services:
           "node",
           "-e",
           "fetch('http://127.0.0.1:3847').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
-        ]
+          ]
       interval: 30s
       timeout: 5s
       retries: 3

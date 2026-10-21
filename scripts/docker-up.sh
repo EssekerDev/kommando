@@ -1,5 +1,5 @@
 #!/bin/sh
-# Démarre uniquement Kommando. N'arrête aucun autre conteneur.
+# Reconstruit uniquement kommando-web. N'arrête aucun autre conteneur.
 set -eu
 
 if ! docker info >/dev/null 2>&1; then
@@ -7,30 +7,19 @@ if ! docker info >/dev/null 2>&1; then
   exit 1
 fi
 
-port_busy() {
-  if command -v lsof >/dev/null 2>&1; then
-    lsof -nP -iTCP:3847 -sTCP:LISTEN >/dev/null 2>&1
-    return
-  fi
-  docker ps --format '{{.Ports}}' | grep -q '3847->'
-}
-
-if port_busy; then
-  echo "Le port 3847 est déjà utilisé sur cette machine."
+others=$(docker ps --format '{{.Names}} {{.Ports}}' | grep '3847' | grep -v '^kommando-web ' || true)
+if [ -n "$others" ]; then
+  echo "Le port 3847 est utilisé par autre chose que kommando-web."
+  echo "$others"
   echo "Aucun conteneur n'a été arrêté."
-  if command -v lsof >/dev/null 2>&1; then
-    lsof -nP -iTCP:3847 -sTCP:LISTEN || true
-  fi
-  echo "Si ce n'est pas Kommando, change la partie gauche du port dans docker-compose.yml,"
-  echo "par exemple \"192.168.0.103:3848:3847\", puis le même port dans Caddy, et relance."
   exit 1
 fi
 
-echo "Conteneurs déjà lancés (inchangés) :"
+echo "Conteneurs déjà lancés (inchangés, sauf kommando-web) :"
 docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Ports}}\t{{.Status}}'
 echo
-echo "Construction et démarrage de kommando-web seulement."
-docker compose -p kommando up -d --build
+echo "Reconstruction de kommando-web. Le journal doit contenir : source 20261021-goutte"
+docker compose -p kommando up -d --build --force-recreate --no-deps web
 echo
 echo "Kommando : http://192.168.0.103:3847"
 echo "Public : https://kommando.esseker.fr"

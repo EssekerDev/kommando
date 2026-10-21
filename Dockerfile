@@ -8,7 +8,10 @@ WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+# La valeur change à chaque livraison. Sans ça, Docker Desktop peut
+# réutiliser l'ancien `npm run build` et le conteneur ne change pas.
+ARG SOURCE_HASH=none
+RUN echo "source ${SOURCE_HASH}" && npm run build
 
 FROM node:22-alpine AS run
 WORKDIR /app

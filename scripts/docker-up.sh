@@ -32,5 +32,6 @@ echo
 echo "Construction et démarrage de kommando-web seulement."
 docker compose -p kommando up -d --build
 echo
-echo "Kommando : http://127.0.0.1:3847"
+echo "Kommando : http://192.168.0.103:3847"
+echo "Public : https://kommando.esseker.fr"
 echo "Arrêt de ce conteneur seul : docker compose -p kommando stop"

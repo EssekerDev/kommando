@@ -11,7 +11,9 @@ services:
     container_name: kommando-web
     init: true
     ports:
-      - "127.0.0.1:3847:3847"
+      # Adresse LAN du Mac Mini. Caddy (192.168.0.50) joint ce port.
+      # 127.0.0.1 resterait invisible depuis le reste du réseau.
+      - "192.168.0.103:3847:3847"
     environment:
       NODE_ENV: production
       PORT: "3847"

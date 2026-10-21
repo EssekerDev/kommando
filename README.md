@@ -1,0 +1,56 @@
+# Kommando
+
+Programme intensif d’allemand en cinq jours. Fiches, script oral, drill et synthèse vocale, dans une interface calée sur l’iPhone 18 Pro Max (440 × 956 pt, Dynamic Island, safe areas 62 pt / 34 pt).
+
+L’orthographe est suisse (`heisse`, `Grüssen`). La forme travaillée est `Sie`.
+
+Dépôt : [github.com/EssekerDev/kommando](https://github.com/EssekerDev/kommando).
+
+## Mac, une commande
+
+Docker Desktop doit être ouvert. Depuis le dossier du projet :
+
+```bash
+docker compose up -d --build
+```
+
+Puis ouvre [http://127.0.0.1:3847](http://127.0.0.1:3847).
+
+Depuis zéro, la même chose en une ligne :
+
+```bash
+git clone https://github.com/EssekerDev/kommando.git && cd kommando && docker compose up -d --build
+```
+
+Cette commande ne crée que le conteneur `kommando-web`, sur le réseau `kommando_internal`, publié uniquement en `127.0.0.1:3847`. Elle n’arrête pas les autres conteneurs.
+
+Arrêt de Kommando seul : `docker compose stop`.
+
+Si le port 3847 est déjà pris, rien n’est lancé. Change alors uniquement le port hôte dans `docker-compose.yml` (`127.0.0.1:3848:3847`) et relance la même commande. Le script `./scripts/docker-up.sh` fait la même chose et affiche les conteneurs déjà ouverts avant de démarrer.
+
+## Lancer sans Docker
+
+```bash
+npm install
+npm run dev
+```
+
+L’application écoute sur [http://localhost:3847](http://localhost:3847).
+
+La voix utilise la synthèse du navigateur (`de-CH`, sinon `de-DE`). Aucune clé n’est requise. La progression, le prénom et le thème restent dans le navigateur.
+
+## Structure
+
+- `components/App.tsx` — coque mobile, safe areas, dock en verre
+- `components/Dashboard.tsx` — les cinq jours et la progression
+- `components/DayView.tsx` — fiches, script, lexique, lecteur
+- `components/ExerciseView.tsx` — drill avec correction immédiate
+- `lib/curriculum.ts` — le contenu des cinq jours
+
+## Logo
+
+Le signe s’appelle Intervalle : une hampe et un chevron à 30°, séparés par une pause.
+
+![Intervalle, logo de Kommando](brand/overview.png)
+
+Maîtres dans `brand/kit/`, icônes dans `brand/digital/`, règles d’usage dans `brand/GUIDE.md`. Pour régénérer les maîtres : `python3 brand/build_kit.py`.

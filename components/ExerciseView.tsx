@@ -103,27 +103,24 @@ export function ExerciseView({
     return (
       <div className="flex flex-col gap-5 pb-4">
         <header>
-          <p className="text-[12px] font-medium tracking-[0.16em] text-[var(--label-2)] uppercase">
-            Drill · Jour {day.id}
-          </p>
-          <h1 className="mt-1 text-[34px] leading-none font-semibold tracking-[-0.03em] tabular-nums">
+          <h1 className="text-[34px] leading-none font-semibold tracking-[-0.03em] tabular-nums">
             {correctCount}
             <span className="text-[22px] font-medium text-[var(--label-2)]">/{day.drills.length}</span>
           </h1>
           <p className="mt-3 text-[17px] leading-6">
             {solid
-              ? "Jour solide. Les fiches restent là si une phrase accroche."
-              : "Pas encore solide. Relisez la fiche, puis recommencez."}
+              ? `Jour ${day.id} solide. Les fiches restent là si une phrase accroche.`
+              : `Jour ${day.id} pas encore solide. Relisez la fiche, puis recommencez.`}
           </p>
-          <p className="mt-1 text-[13px] text-[var(--label-2)]">
-            Cette passe : {percent}%. Meilleur score : {best}%.
+          <p className="mt-1 text-[15px] text-[var(--label-2)]">
+            Cette passe : {percent} %. Meilleur score : {best} %.
           </p>
         </header>
 
         {misses.length > 0 && (
-          <ul className="flex flex-col gap-2">
+          <ul className="inset divide-y divide-[var(--line)]">
             {misses.map((miss) => (
-              <li key={miss.prompt} className="glass rounded-3xl px-4 py-3">
+              <li key={miss.prompt} className="px-4 py-3">
                 <p className="text-[15px] font-medium">{miss.prompt}</p>
                 <p className="mt-1 text-[13px] leading-5 text-[var(--label-2)]">{miss.why}</p>
               </li>
@@ -134,7 +131,7 @@ export function ExerciseView({
         <div className="flex flex-col gap-2">
           {solid && day.id < 5 && (
             <Button type="button" size="touch" className="press w-full" onClick={onNextDay}>
-              Jour {day.id + 1}
+              Ouvrir le jour {day.id + 1}
             </Button>
           )}
           <Button type="button" variant="outline" size="touch" className="press w-full bg-transparent" onClick={restart}>
@@ -161,10 +158,10 @@ export function ExerciseView({
     <div className="flex flex-col gap-4 pb-4" key={attempt}>
       <header>
         <div className="flex items-baseline justify-between gap-3">
-          <p className="text-[12px] font-medium tracking-[0.16em] text-[var(--label-2)] uppercase">
+          <p className="text-[15px] font-medium text-[var(--label-2)]">
             Jour {day.id} · {day.title}
           </p>
-          <p className="font-mono text-[13px] text-[var(--label-2)] tabular-nums">
+          <p className="text-[15px] text-[var(--label-2)] tabular-nums">
             {index + 1}/{day.drills.length}
           </p>
         </div>
@@ -206,8 +203,8 @@ export function ExerciseView({
               : "color-mix(in oklab, var(--bad) 14%, transparent)",
           }}
         >
-          <p className="text-[13px] font-semibold tracking-[0.08em] uppercase" style={{ color: isCorrect ? "var(--good)" : "var(--bad)" }}>
-            {isCorrect ? "Juste" : "À revoir"}
+          <p className="text-[15px] font-semibold" style={{ color: isCorrect ? "var(--good)" : "var(--bad)" }}>
+            {isCorrect ? "C’est juste." : "Pas encore."}
           </p>
           <p className="mt-1 text-[15px] leading-6">{drill.why}</p>
         </div>
@@ -217,7 +214,7 @@ export function ExerciseView({
         <Button
           type="button"
           size="touch"
-          className="press sticky bottom-[calc(var(--sab)+5.1rem)] w-full"
+          className="press lift w-full"
           disabled={placed.length !== drill.answer.length}
           onClick={() => grade(orderCorrect)}
         >
@@ -229,7 +226,7 @@ export function ExerciseView({
         <Button
           type="button"
           size="touch"
-          className="press sticky bottom-[calc(var(--sab)+5.1rem)] w-full"
+          className="press lift w-full"
           onClick={() => advance(isCorrect)}
         >
           {index === day.drills.length - 1 ? "Voir le score" : "Continuer"}
@@ -301,14 +298,8 @@ function Question({
                 aria-pressed={selected}
                 onClick={() => onPick(option.id)}
               >
-                {(showCorrect || showWrong) && (
-                  <span
-                    className="mr-2 text-[12px] font-semibold tracking-[0.08em] uppercase"
-                    style={{ color: showCorrect ? "var(--good)" : "var(--bad)" }}
-                  >
-                    {showCorrect ? "Juste" : "Non"}
-                  </span>
-                )}
+                {showCorrect && <span className="sr-only">C’est juste. </span>}
+                {showWrong && <span className="sr-only">Pas encore. </span>}
                 {option.label}
               </button>
             )
@@ -324,7 +315,7 @@ function Question({
           >
             {placed.length === 0 && (
               <p className="self-center text-[15px] text-[var(--label-3)]">
-                Touchez les mots dans l’ordre.
+                Placez les mots dans l’ordre.
               </p>
             )}
             {placed.map((token, tokenIndex) => (

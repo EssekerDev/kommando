@@ -11,8 +11,8 @@ const items: { id: Tab; label: string; icon: typeof House }[] = [
   { id: "voice", label: "Voix", icon: AudioLines },
 ]
 
-const LENS = 96
-const MAG = 1.72
+const LENS = 92
+const MAG = 1.92
 
 function phoneBar() {
   const wide = window.matchMedia("(min-width: 1100px)").matches
@@ -29,9 +29,6 @@ export function Dock({
 }) {
   const dockRef = useRef<HTMLElement>(null)
   const lensRef = useRef<HTMLDivElement>(null)
-  const cloneRef = useRef<HTMLDivElement>(null)
-  const glintRef = useRef<HTMLDivElement>(null)
-  const dispRef = useRef<SVGFEDisplacementMapElement>(null)
   const fromPointer = useRef(false)
   const raf = useRef(0)
   const live = useRef({
@@ -48,31 +45,54 @@ export function Dock({
     innerV: 0,
     targetInner: 1,
     warp: 0,
+    flat: 0,
+    flatV: 0,
+    targetFlat: 0,
     melt: false,
   })
 
   function paint() {
     const lens = lensRef.current
-    const clone = cloneRef.current
     const dock = dockRef.current
     const motion = live.current
-    if (!lens || !clone || !dock) return
+    if (!lens || !dock) return
     const rect = dock.getBoundingClientRect()
     lens.style.opacity = motion.opacity.toFixed(3)
     lens.style.visibility = motion.opacity < 0.02 ? "hidden" : "visible"
     lens.style.setProperty("--warp", Math.min(1, motion.warp / 14).toFixed(3))
-    lens.style.transform = `translate3d(${motion.x - LENS / 2}px, -54%, 0) scale(${motion.scale})`
-    clone.style.width = `${rect.width}px`
-    clone.style.height = `${rect.height}px`
-    clone.style.left = `${LENS / 2 - motion.x}px`
-    clone.style.top = `${LENS / 2 - rect.height / 2}px`
-    clone.style.transformOrigin = `${motion.x}px ${rect.height / 2}px`
-    const skew = Math.max(-7, Math.min(7, motion.vx * 0.32))
-    clone.style.transform = `scale(${motion.inner}) skewX(${skew}deg)`
-    dispRef.current?.setAttribute("scale", motion.warp.toFixed(2))
-    if (glintRef.current) {
-      glintRef.current.style.transform = `translate(${(-skew * 1.6).toFixed(2)}px, 0)`
-    }
+    const flatY = 1 - motion.flat * 0.66
+    lens.style.transform = `translate3d(${motion.x - LENS / 2}px, -62%, 0) scale(${motion.scale}, ${motion.scale * flatY})`
+
+    const skew = Math.max(-9, Math.min(9, motion.vx * 0.34))
+    const squash = 1 - Math.min(0.08, Math.abs(motion.vx) * 0.006)
+    const ca = 2.2 + Math.min(5.5, Math.abs(motion.vx) * 0.32)
+    const base = `scale(${motion.inner}) scaleY(${squash}) skewX(${skew}deg)`
+    const focusY = rect.height * 0.4
+    lens.querySelectorAll<HTMLElement>(".lens-clone").forEach((node) => {
+      const shift = Number(node.dataset.shift || 0)
+      node.style.width = `${rect.width}px`
+      node.style.height = `${rect.height}px`
+      node.style.left = `${LENS / 2 - motion.x}px`
+      node.style.top = `${LENS / 2 - focusY}px`
+      node.style.transformOrigin = `${motion.x}px ${focusY}px`
+      node.style.transform = shift
+        ? `translate3d(${shift * ca}px, ${shift * ca * 0.2}px, 0) ${base}`
+        : base
+    })
+
+    const sheen = lens.querySelector<HTMLElement>(".lens-sheen")
+    if (sheen) sheen.style.transform = `translate(${(-skew * 1.4).toFixed(2)}px, 0)`
+
+    dock.querySelectorAll<HTMLElement>(":scope > button").forEach((button) => {
+      if (motion.opacity < 0.02) {
+        button.style.opacity = ""
+        return
+      }
+      const box = button.getBoundingClientRect()
+      const center = box.left + box.width / 2 - rect.left
+      const cover = Math.max(0, 1 - Math.abs(center - motion.x) / (LENS * 0.58))
+      button.style.opacity = (1 - cover * Math.min(1, motion.opacity)).toFixed(3)
+    })
   }
 
   function frame() {
@@ -87,20 +107,24 @@ export function Dock({
     motion.scaleV *= 0.7
     motion.scale += motion.scaleV
 
-    motion.innerV += (motion.targetInner - motion.inner) * 0.14
-    motion.innerV *= 0.72
+    const innerStiff = motion.dragging ? 0.14 : 0.32
+    motion.innerV += (motion.targetInner - motion.inner) * innerStiff
+    motion.innerV *= motion.dragging ? 0.72 : 0.62
     motion.inner += motion.innerV
 
+    motion.flatV += (motion.targetFlat - motion.flat) * (motion.dragging ? 0.28 : 0.14)
+    motion.flatV *= 0.72
+    motion.flat += motion.flatV
+
     const speed = Math.abs(motion.vx)
-    const targetWarp = motion.dragging ? Math.min(18, speed * 1.2) : 0
+    const targetWarp = motion.dragging ? Math.min(18, speed * 1.15) : 0
     motion.warp += (targetWarp - motion.warp) * 0.18
 
     let targetOpacity = 0
     if (motion.dragging) targetOpacity = 1
     else if (motion.melt) {
-      const settled = Math.abs(motion.inner - 1) < 0.06 && Math.abs(motion.x - motion.homeX) < 8
+      const settled = motion.flat > 0.84 && Math.abs(motion.x - motion.homeX) < 8
       targetOpacity = settled ? 0 : 1
-      if (settled) motion.targetScale = 0.78
     }
     motion.opacity += (targetOpacity - motion.opacity) * (motion.dragging ? 0.28 : 0.12)
 
@@ -111,12 +135,16 @@ export function Dock({
       motion.opacity > 0.02 ||
       Math.abs(motion.vx) > 0.15 ||
       Math.abs(motion.scaleV) > 0.003 ||
-      Math.abs(motion.innerV) > 0.003
+      Math.abs(motion.innerV) > 0.003 ||
+      Math.abs(motion.flatV) > 0.003
     if (alive) raf.current = requestAnimationFrame(frame)
     else {
       raf.current = 0
       motion.melt = false
       if (lensRef.current) lensRef.current.style.visibility = "hidden"
+      dockRef.current?.querySelectorAll<HTMLElement>("scope > button").forEach((button) => {
+        button.style.opacity = ""
+      })
     }
   }
 
@@ -153,6 +181,7 @@ export function Dock({
     motion.scaleV = 0.12
     motion.targetScale = 1
     motion.targetInner = MAG
+    motion.targetFlat = 0
     motion.opacity = Math.max(motion.opacity, 0.04)
     event.currentTarget.setPointerCapture(event.pointerId)
     wake()
@@ -175,6 +204,7 @@ export function Dock({
     motion.homeX = ((index + 0.5) * rect.width) / items.length
     motion.targetX = motion.homeX
     motion.targetInner = 1
+    motion.targetFlat = 1
     motion.melt = true
     if (near && items[index].id !== tab) {
       fromPointer.current = true
@@ -192,9 +222,29 @@ export function Dock({
     motion.dragging = false
     motion.melt = true
     motion.targetInner = 1
-    motion.targetScale = 0.7
+    motion.targetFlat = 1
+    motion.targetScale = 0.86
     motion.homeX = motion.x
     wake()
+  }
+
+  function faces() {
+    return items.map((item) => {
+      const active = tab === item.id
+      const Icon = item.icon
+      return (
+        <span key={item.id} className="lens-face">
+          <Icon
+            className="size-[22px]"
+            strokeWidth={active ? 2.15 : 1.7}
+            color={active ? "var(--signal)" : "var(--label-2)"}
+          />
+          <span className="lens-label" style={{ visibility: "hidden" }}>
+            {item.label}
+          </span>
+        </span>
+      )
+    })
   }
 
   return (
@@ -239,50 +289,16 @@ export function Dock({
         )
       })}
       <div className="lens" ref={lensRef} aria-hidden="true">
-        <div className="lens-clone" ref={cloneRef}>
-          {items.map((item) => {
-            const active = tab === item.id
-            const Icon = item.icon
-            return (
-              <span key={item.id} className="flex flex-col items-center justify-center gap-0.5">
-                <Icon
-                  className="size-[22px]"
-                  strokeWidth={active ? 2.15 : 1.7}
-                  color={active ? "var(--signal)" : "var(--label-2)"}
-                />
-                <span
-                  className="text-[10px] font-medium tracking-tight"
-                  style={{ color: active ? "var(--signal)" : "var(--label-2)" }}
-                >
-                  {item.label}
-                </span>
-              </span>
-            )
-          })}
+        <div className="lens-clone lens-ca" data-shift="1">
+          {faces()}
         </div>
-        <div className="lens-glint" ref={glintRef} />
+        <div className="lens-clone lens-ca" data-shift="-1">
+          {faces()}
+        </div>
+        <div className="lens-clone">{faces()}</div>
+        <div className="lens-sheen" />
         <div className="lens-rim" />
       </div>
-      <svg className="dock-filter" aria-hidden="true">
-        <filter id="dock-water" x="-20%" y="-20%" width="140%" height="140%">
-          <feTurbulence type="turbulence" baseFrequency="0.014 0.026" numOctaves="2" seed="4" result="noise">
-            <animate
-              attributeName="baseFrequency"
-              values="0.012 0.02;0.02 0.032;0.012 0.02"
-              dur="2.8s"
-              repeatCount="indefinite"
-            />
-          </feTurbulence>
-          <feDisplacementMap
-            ref={dispRef}
-            in="SourceGraphic"
-            in2="noise"
-            scale="0"
-            xChannelSelector="R"
-            yChannelSelector="G"
-          />
-        </filter>
-      </svg>
     </nav>
   )
 }

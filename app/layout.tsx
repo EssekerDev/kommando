@@ -17,7 +17,7 @@ const themeScript = `(function(){try{var t=localStorage.getItem("kommando-theme"
 export const metadata: Metadata = {
   title: "Kommando — Allemand en 5 jours",
   description:
-    "Programme intensif d’allemand de survie, orthographe suisse, fiches, drills et voix. Pensé pour l’iPhone 18 Pro Max.",
+    "Programme intensif d’allemand de survie, orthographe suisse, fiches, drills et voix.",
   applicationName: "Kommando",
   appleWebApp: {
     capable: true,

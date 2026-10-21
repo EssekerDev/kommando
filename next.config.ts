@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   cacheComponents: true,
   partialPrefetching: true,
+  devIndicators: { position: "top-right" },
   turbopack: {
     rules: {
       "*.css": {

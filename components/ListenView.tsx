@@ -13,10 +13,7 @@ export function ListenView() {
   return (
     <div className="flex flex-col gap-5 pb-4">
       <header>
-        <p className="text-[12px] font-medium tracking-[0.16em] text-[var(--label-2)] uppercase">
-          Module audio
-        </p>
-        <h1 className="mt-1 text-[34px] leading-[1.12] font-semibold tracking-[-0.03em]">
+        <h1 className="text-[34px] leading-[1.12] font-semibold tracking-[-0.03em]">
           Voix
         </h1>
         <p className="mt-2 text-[17px] leading-6 text-[var(--label-2)]">
@@ -24,7 +21,7 @@ export function ListenView() {
         </p>
       </header>
 
-      <div className="glass grid grid-cols-2 gap-1 rounded-full p-1" role="group" aria-label="Vitesse">
+      <div className="glass grid max-w-md grid-cols-2 gap-1 rounded-full p-1" role="group" aria-label="Vitesse">
         {[
           { rate: 0.78, label: "Lent" },
           { rate: 1, label: "Clair" },
@@ -55,14 +52,15 @@ export function ListenView() {
             : "Pas de voix allemande installée. La lecture part quand même : vérifiez ce que vous entendez."}
       </p>
 
+      <div className="voice-days">
       {days.map((day) => {
         const lines = spokenLines(day, state.name)
         return (
           <section key={day.id}>
-            <h2 className="mb-2 text-[13px] font-medium tracking-[0.08em] text-[var(--label-3)] uppercase">
+            <h2 className="mb-3 text-[20px] leading-6 font-semibold tracking-[-0.02em]">
               Jour {day.id} · {day.title}
             </h2>
-            <ul className="glass divide-y divide-[var(--line)] rounded-3xl px-3">
+            <ul className="inset divide-y divide-[var(--line)] px-3">
               {lines.map((line) => {
                 const active = speech.speakingId === line.id
                 return (
@@ -83,7 +81,7 @@ export function ListenView() {
                     </button>
                     <span className="min-w-0 flex-1 py-1">
                       {line.label && (
-                        <span className="block text-[11px] font-medium tracking-[0.08em] text-[var(--label-3)] uppercase">
+                        <span className="block text-[13px] font-medium text-[var(--label-2)]">
                           {line.label}
                         </span>
                       )}
@@ -99,6 +97,7 @@ export function ListenView() {
           </section>
         )
       })}
+      </div>
     </div>
   )
 }

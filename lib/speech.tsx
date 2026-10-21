@@ -18,6 +18,7 @@ type SpeechApi = {
   rate: number
   setRate: (rate: number) => void
   speakingId: string | null
+  current: string | null
   speak: (id: string, text: string) => void
   speakAll: (id: string, lines: string[]) => void
   stop: () => void
@@ -59,7 +60,9 @@ export function SpeechProvider({ children }: { children: ReactNode }) {
   const [german, setGerman] = useState(false)
   const [rate, setRate] = useState(1)
   const [speakingId, setSpeakingId] = useState<string | null>(null)
+  const [current, setCurrent] = useState<string | null>(null)
   const rateRef = useRef(rate)
+  const activeRef = useRef<string | null>(null)
 
   useEffect(() => {
     rateRef.current = rate
@@ -81,27 +84,39 @@ export function SpeechProvider({ children }: { children: ReactNode }) {
 
   const stop = useCallback(() => {
     window.speechSynthesis?.cancel()
+    activeRef.current = null
     setSpeakingId(null)
+    setCurrent(null)
   }, [])
 
   const speakAll = useCallback((id: string, lines: string[]) => {
     const synth = window.speechSynthesis
     if (!synth || lines.length === 0) return
+    activeRef.current = id
     setSpeakingId(id)
+    setCurrent(lines[0])
     synth.cancel()
     if (synth.paused) synth.resume()
     lines.forEach((text, index) => {
       const utterance = new SpeechSynthesisUtterance(text)
       configure(utterance, rateRef.current)
+      utterance.onstart = () => setCurrent(text)
       if (index === lines.length - 1) {
-        utterance.onend = () =>
-          setSpeakingId((current) => (current === id ? null : current))
+        const release = () => {
+          if (activeRef.current !== id) return
+          activeRef.current = null
+          setSpeakingId(null)
+          setCurrent(null)
+        }
+        utterance.onend = release
         utterance.onerror = (event) => {
           if (event.error === "canceled" || event.error === "interrupted") {
-            setSpeakingId((current) => (current === id ? null : current))
+            release()
             return
           }
+          activeRef.current = null
           setSpeakingId(null)
+          setCurrent(null)
         }
       }
       synth.speak(utterance)
@@ -118,11 +133,12 @@ export function SpeechProvider({ children }: { children: ReactNode }) {
       rate,
       setRate,
       speakingId,
+      current,
       speak,
       speakAll,
       stop,
     }),
-    [german, rate, speak, speakAll, speakingId, stop, supported, voiceLabel]
+    [current, german, rate, speak, speakAll, speakingId, stop, supported, voiceLabel]
   )
 
   return <SpeechContext.Provider value={api}>{children}</SpeechContext.Provider>

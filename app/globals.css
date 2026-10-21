@@ -178,6 +178,7 @@
   --sat: env(safe-area-inset-top, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
   --dock-clear: calc(5.35rem + var(--sab));
+  --bar-h: calc(var(--sat) + 3.4rem);
   height: 100dvh;
   background: var(--canvas);
   color: var(--ink);
@@ -211,9 +212,10 @@
   position: sticky;
   top: 0;
   z-index: 15;
-  display: flex;
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem;
   align-items: center;
-  justify-content: space-between;
+  gap: 0.5rem;
   min-height: 2.75rem;
   margin-left: calc(max(1.25rem, env(safe-area-inset-left)) * -1);
   margin-right: calc(max(1.25rem, env(safe-area-inset-right)) * -1);
@@ -232,6 +234,85 @@
   box-shadow: inset 0 -1px 0 var(--line);
   backdrop-filter: blur(28px) saturate(1.7);
   -webkit-backdrop-filter: blur(28px) saturate(1.7);
+}
+
+.phone-title {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 180ms ease-out,
+    transform 240ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.is-scrolled .phone-title {
+  opacity: 1;
+  transform: none;
+}
+
+.is-scrolled .phone-bar::before {
+  opacity: 1;
+}
+
+.scroller.has-player {
+  padding-bottom: calc(var(--dock-clear) + 5.5rem);
+}
+
+.sticky-tools {
+  position: sticky;
+  top: calc(var(--bar-h) + 0.25rem);
+  z-index: 12;
+}
+
+.mini-player {
+  position: fixed;
+  z-index: 19;
+  left: max(1.1rem, env(safe-area-inset-left));
+  right: max(1.1rem, env(safe-area-inset-right));
+  bottom: calc(var(--sab) + 5.2rem);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.3rem 0.25rem 0.9rem;
+  border-radius: 999px;
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 40%, transparent),
+    0 10px 28px color-mix(in oklab, black 22%, transparent);
+  animation: rise 260ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+.wave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 16px;
+  margin-right: 0.35rem;
+}
+
+.wave i {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--signal);
+  transform-origin: 50% 50%;
+  animation: wave 900ms ease-in-out infinite;
+}
+
+.wave i:nth-child(2) { animation-delay: -300ms; }
+.wave i:nth-child(3) { animation-delay: -600ms; }
+
+.drill {
+  min-height: calc(100dvh - var(--bar-h) - var(--dock-clear) - 2.5rem);
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
 }
 
 @supports (animation-timeline: scroll()) {
@@ -547,7 +628,7 @@ html:not(.dark) .lens-ca {
 .home {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: 1.25rem;
 }
 
 .voice-days {
@@ -620,6 +701,25 @@ html:not(.dark) .lens-ca {
 
   .phone-bar {
     display: none;
+  }
+
+  .sticky-tools {
+    top: 1rem;
+  }
+
+  .drill {
+    min-height: 0;
+  }
+
+  .mini-player {
+    left: auto;
+    right: 2rem;
+    bottom: 1.5rem;
+    width: 24rem;
+  }
+
+  .scroller.has-player {
+    padding-bottom: 6rem;
   }
 
   .scroller {
@@ -746,6 +846,13 @@ a:focus-visible {
   }
 
   .phone-bar::before {
+    animation: none;
+  }
+
+  .phone-title,
+  .mini-player,
+  .wave i {
+    transition: none;
     animation: none;
   }
 }

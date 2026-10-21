@@ -8,7 +8,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        SOURCE_HASH: "20261021-verre"
+        SOURCE_HASH: "20261021-compact"
     image: kommando:local
     container_name: kommando-web
     init: true

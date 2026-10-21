@@ -14,7 +14,7 @@ Docker Desktop doit être ouvert. Depuis le dossier du projet :
 git pull && docker compose up -d --build --force-recreate
 ```
 
-Le journal doit contenir `source 20261021-verre`, puis `Container kommando-web Recreated`. Si tu lis seulement `Running` en 0,0 s, l’image n’a pas été reconstruite.
+Le journal doit contenir `source 20261021-compact`, puis `Container kommando-web Recreated`. Si tu lis seulement `Running` en 0,0 s, l’image n’a pas été reconstruite.
 
 Puis ouvre [http://192.168.0.103:3847](http://192.168.0.103:3847), ou [https://kommando.esseker.fr](https://kommando.esseker.fr) une fois Caddy en place. Recharge la page sans le cache du navigateur.
 

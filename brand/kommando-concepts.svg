@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="984" viewBox="0 0 1600 984"><defs><filter id="grey"><feColorMatrix type="saturate" values="0"/></filter></defs><rect width="1600" height="984" fill="#f7f7f4"/><text x="60" y="78" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="40" font-weight="700" fill="#161616">Kommando — trois directions</text><text x="60" y="116" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="20" fill="#6b6b6b">Noir uniquement. Choisir une direction, ou dire ce qui plaît dans chacune.</text><rect x="60" y="150" width="474.667" height="774" rx="18" fill="#fff" stroke="#161616" stroke-width="2"/><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="0 0 256 256" x="90" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title id="c0-title">Kommando — Marche, symbol</title>
+  <g id="c0-symbol" transform="translate(30 27.30) scale(0.81600)">
+    <path fill="#000" d="M 0 0 L 70 0 L 194.03 0 L 194.03 10.39 L 70 82 L 70 102 L 250 205.92 L 250 241.92 L 214 241.92 L 214 221.14 L 178 221.14 L 178 200.35 L 142 200.35 L 142 179.57 L 106 179.57 L 106 158.78 L 70 158.78 L 70 138 L 70 241.92 L 0 241.92 Z"/>
+  </g>
+</svg>
+</g><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="0 0 1301 256" x="90" y="514" width="414.667" height="120" preserveAspectRatio="xMidYMid meet">
+  <title id="l0-title">Kommando — Marche, lockup</title>
+  <g id="l0-symbol" transform="translate(31.44 47.32) scale(0.63750)">
+      <path fill="#000" d="M 0 0 L 70 0 L 194.03 0 L 194.03 10.39 L 70 82 L 70 102 L 250 205.92 L 250 241.92 L 214 241.92 L 214 221.14 L 178 221.14 L 178 200.35 L 142 200.35 L 142 179.57 L 106 179.57 L 106 158.78 L 70 158.78 L 70 138 L 70 241.92 L 0 241.92 Z"/>
+  </g>
+  <g id="l0-wordmark" transform="translate(248 0)">
+    <path fill="#000" fill-rule="nonzero" d="M 0 74 L 28 74 L 114.46 74 L 114.46 82.08 L 28 132 L 28 152 L 114.46 201.92 L 114.46 210 L 28 210 L 0 210 Z"/>
+    <path fill="#000" fill-rule="evenodd" d="M 240.46 160 A 57 57 0 1 1 126.46 160 A 57 57 0 1 1 240.46 160 Z M 214.46 160 A 31 31 0 1 0 152.46 160 A 31 31 0 1 0 214.46 160 Z"/>
+    <path fill="#000" fill-rule="nonzero" d="M 250.46 210 L 250.46 151 A 48 48 0 0 1 346.46 151 L 346.46 210 L 320.46 210 L 320.46 151 A 22 22 0 0 0 276.46 151 L 276.46 210 Z M 320.46 210 L 320.46 151 A 48 48 0 0 1 416.46 151 L 416.46 210 L 390.46 210 L 390.46 151 A 22 22 0 0 0 346.46 151 L 346.46 210 Z"/>
+    <path fill="#000" fill-rule="nonzero" d="M 432.46 210 L 432.46 151 A 48 48 0 0 1 528.46 151 L 528.46 210 L 502.46 210 L 502.46 151 A 22 22 0 0 0 458.46 151 L 458.46 210 Z M 502.46 210 L 502.46 151 A 48 48 0 0 1 598.46 151 L 598.46 210 L 572.46 210 L 572.46 151 A 22 22 0 0 0 528.46 151 L 528.46 210 Z"/>
+    <path fill="#000" fill-rule="nonzero" d="M 672.46 110 L 698.46 110 L 698.46 217 L 672.46 217 Z M 696.46 173 A 44 44 0 1 1 608.46 173 A 44 44 0 1 1 696.46 173 Z M 670.46 173 A 18 18 0 1 0 634.46 173 A 18 18 0 1 0 670.46 173 Z M 608.46 110 L 672.46 110 L 672.46 136 L 608.46 136 Z"/>
+    <path fill="#000" fill-rule="nonzero" d="M 706.46 210 L 706.46 151 A 48 48 0 0 1 802.46 151 L 802.46 210 L 776.46 210 L 776.46 151 A 22 22 0 0 0 732.46 151 L 732.46 210 Z"/>
+    <path fill="#000" fill-rule="evenodd" d="M 924.46 160 A 57 57 0 1 1 810.46 160 A 57 57 0 1 1 924.46 160 Z M 898.46 160 A 31 31 0 1 0 836.46 160 A 31 31 0 1 0 898.46 160 Z M 899.46 74 L 925.46 74 L 925.46 210 L 899.46 210 Z"/>
+    <path fill="#000" fill-rule="evenodd" d="M 1045.46 160 A 57 57 0 1 1 931.46 160 A 57 57 0 1 1 1045.46 160 Z M 1019.46 160 A 31 31 0 1 0 957.46 160 A 31 31 0 1 0 1019.46 160 Z"/>
+  </g>
+</svg>
+</g><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="0 0 256 256" x="90" y="660" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title id="s064-title">Kommando — Marche, symbol</title>
+  <g id="s064-symbol" transform="translate(30 27.30) scale(0.81600)">
+    <path fill="#000" d="M 0 0 L 70 0 L 194.03 0 L 194.03 10.39 L 70 82 L 70 102 L 250 205.92 L 250 241.92 L 214 241.92 L 214 221.14 L 178 221.14 L 178 200.35 L 142 200.35 L 142 179.57 L 106 179.57 L 106 158.78 L 70 158.78 L 70 138 L 70 241.92 L 0 241.92 Z"/>
+  </g>
+</svg>
+</g><text x="122" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="0 0 256 256" x="180" y="692" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title id="s032-title">Kommando — Marche, symbol</title>
+  <g id="s032-symbol" transform="translate(30 27.30) scale(0.81600)">
+    <path fill="#000" d="M 0 0 L 70 0 L 194.03 0 L 194.03 10.39 L 70 82 L 70 102 L 250 205.92 L 250 241.92 L 214 241.92 L 214 221.14 L 178 221.14 L 178 200.35 L 142 200.35 L 142 179.57 L 106 179.57 L 106 158.78 L 70 158.78 L 70 138 L 70 241.92 L 0 241.92 Z"/>
+  </g>
+</svg>
+</g><text x="196" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="0 0 256 256" x="238" y="708" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title id="s016-title">Kommando — Marche, symbol</title>
+  <g id="s016-symbol" transform="translate(30 27.30) scale(0.81600)">
+    <path fill="#000" d="M 0 0 L 70 0 L 194.03 0 L 194.03 10.39 L 70 82 L 70 102 L 250 205.92 L 250 241.92 L 214 241.92 L 214 221.14 L 178 221.14 L 178 200.35 L 142 200.35 L 142 179.57 L 106 179.57 L 106 158.78 L 70 158.78 L 70 138 L 70 241.92 L 0 241.92 Z"/>
+  </g>
+</svg>
+</g><text x="246" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="90.0" y="780" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">A · Marche</text><text x="90.0" y="808" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#161616" letter-spacing="1.5">RECOMMENDED</text><text x="90.0" y="842" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Cinq marches dans le K : les cinq jours</text><text x="90.0" y="868" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">tiennent dans une lettre.</text><rect x="562.667" y="150" width="474.667" height="774" rx="18" fill="#fff" stroke="#e4e4e0" stroke-width="1"/><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="2 67.81 252 112.38" x="592.667" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title id="c1-title">Kommando — Doppel, symbol</title>
+  <g id="c1-symbol" transform="translate(20 23.99) scale(0.6391)">
+    <path fill="#000" d="M 0 210 L 0 151 A 48 48 0 0 1 96 151 L 96 210 L 70 210 L 70 151 A 22 22 0 0 0 26 151 L 26 210 Z M 70 210 L 70 151 A 48 48 0 0 1 166 151 L 166 210 L 140 210 L 140 151 A 22 22 0 0 0 96 151 L 96 210 Z"/>
+    <path fill="#000" d="M 172 210 L 172 151 A 48 48 0 0 1 268 151 L 268 210 L 242 210 L 242 151 A 22 22 0 0 0 198 151 L 198 210 Z M 242 210 L 242 151 A 48 48 0 0 1 338 151 L 338 210 L 312 210 L 312 151 A 22 22 0 0 0 268 151 L 268 210 Z"/>
+  </g>
+</svg>
+</g><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="0 0 1293 256" x="592.667" y="514" width="414.667" height="120" preserveAspectRatio="xMidYMid meet">
+  <title id="l1-title">Kommando — Doppel, lockup</title>
+  <g id="l1-symbol" transform="translate(23.62 44.74) scale(0.49926)">
+      <path fill="#000" d="M 0 210 L 0 151 A 48 48 0 0 1 96 151 L 96 210 L 70 210 L 70 151 A 22 22 0 0 0 26 151 L 26 210 Z M 70 210 L 70 151 A 48 48 0 0 1 166 151 L 166 210 L 140 210 L 140 151 A 22 22 0 0 0 96 151 L 96 210 Z"/>
+      <path fill="#000" d="M 172 210 L 172 151 A 48 48 0 0 1 268 151 L 268 210 L 242 210 L 242 151 A 22 22 0 0 0 198 151 L 198 210 Z M 242 210 L 242 151 A 48 48 0 0 1 338 151 L 338 210 L 312 210 L 312 151 A 22 22 0 0 0 268 151 L 268 210 Z"/>
+  </g>
+  <g id="l1-wordmark" transform="translate(248 0)">
+    <path fill="#000" fill-rule="nonzero" d="M 0 74 L 28 74 L 114.46 74 L 114.46 82.08 L 28 132 L 28 152 L 114.46 201.92 L 114.46 210 L 28 210 L 0 210 Z"/>
+    <path fill="#000" fill-rule="evenodd" d="M 240.46 160 A 57 57 0 1 1 126.46 160 A 57 57 0 1 1 240.46 160 Z M 214.46 160 A 31 31 0 1 0 152.46 160 A 31 31 0 1 0 214.46 160 Z"/>
+    <path fill="#000" fill-rule="nonzero" d="M 250.46 210 L 250.46 151 A 48 48 0 0 1 346.46 151 L 346.46 210 L 320.46 210 L 320.46 151 A 22 22 0 0 0 276.46 151 L 276.46 210 Z M 320.46 210 L 320.46 151 A 48 48 0 0 1 416.46 151 L 416.46 210 L 390.46 210 L 390.46 151 A 22 22 0 0 0 346.46 151 L 346.46 210 Z"/>
+    <path fill="#000" fill-rule="nonzero" d="M 424.46 210 L 424.46 151 A 48 48 0 0 1 520.46 151 L 520.46 210 L 494.46 210 L 494.46 151 A 22 22 0 0 0 450.46 151 L 450.46 210 Z M 494.46 210 L 494.46 151 A 48 48 0 0 1 590.46 151 L 590.46 210 L 564.46 210 L 564.46 151 A 22 22 0 0 0 520.46 151 L 520.46 210 Z"/>
+    <path fill="#000" fill-rule="nonzero" d="M 664.46 110 L 690.46 110 L 690.46 217 L 664.46 217 Z M 688.46 173 A 44 44 0 1 1 600.46 173 A 44 44 0 1 1 688.46 173 Z M 662.46 173 A 18 18 0 1 0 626.46 173 A 18 18 0 1 0 662.46 173 Z M 600.46 110 L 664.46 110 L 664.46 136 L 600.46 136 Z"/>
+    <path fill="#000" fill-rule="nonzero" d="M 698.46 210 L 698.46 151 A 48 48 0 0 1 794.46 151 L 794.46 210 L 768.46 210 L 768.46 151 A 22 22 0 0 0 724.46 151 L 724.46 210 Z"/>
+    <path fill="#000" fill-rule="evenodd" d="M 916.46 160 A 57 57 0 1 1 802.46 160 A 57 57 0 1 1 916.46 160 Z M 890.46 160 A 31 31 0 1 0 828.46 160 A 31 31 0 1 0 890.46 160 Z M 891.46 74 L 917.46 74 L 917.46 210 L 891.46 210 Z"/>
+    <path fill="#000" fill-rule="evenodd" d="M 1037.46 160 A 57 57 0 1 1 923.46 160 A 57 57 0 1 1 1037.46 160 Z M 1011.46 160 A 31 31 0 1 0 949.46 160 A 31 31 0 1 0 1011.46 160 Z"/>
+  </g>
+</svg>
+</g><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="2 67.81 252 112.38" x="592.667" y="660" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title id="s164-title">Kommando — Doppel, symbol</title>
+  <g id="s164-symbol" transform="translate(20 23.99) scale(0.6391)">
+    <path fill="#000" d="M 0 210 L 0 151 A 48 48 0 0 1 96 151 L 96 210 L 70 210 L 70 151 A 22 22 0 0 0 26 151 L 26 210 Z M 70 210 L 70 151 A 48 48 0 0 1 166 151 L 166 210 L 140 210 L 140 151 A 22 22 0 0 0 96 151 L 96 210 Z"/>
+    <path fill="#000" d="M 172 210 L 172 151 A 48 48 0 0 1 268 151 L 268 210 L 242 210 L 242 151 A 22 22 0 0 0 198 151 L 198 210 Z M 242 210 L 242 151 A 48 48 0 0 1 338 151 L 338 210 L 312 210 L 312 151 A 22 22 0 0 0 268 151 L 268 210 Z"/>
+  </g>
+</svg>
+</g><text x="624.667" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="2 67.81 252 112.38" x="682.667" y="692" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title id="s132-title">Kommando — Doppel, symbol</title>
+  <g id="s132-symbol" transform="translate(20 23.99) scale(0.6391)">
+    <path fill="#000" d="M 0 210 L 0 151 A 48 48 0 0 1 96 151 L 96 210 L 70 210 L 70 151 A 22 22 0 0 0 26 151 L 26 210 Z M 70 210 L 70 151 A 48 48 0 0 1 166 151 L 166 210 L 140 210 L 140 151 A 22 22 0 0 0 96 151 L 96 210 Z"/>
+    <path fill="#000" d="M 172 210 L 172 151 A 48 48 0 0 1 268 151 L 268 210 L 242 210 L 242 151 A 22 22 0 0 0 198 151 L 198 210 Z M 242 210 L 242 151 A 48 48 0 0 1 338 151 L 338 210 L 312 210 L 312 151 A 22 22 0 0 0 268 151 L 268 210 Z"/>
+  </g>
+</svg>
+</g><text x="698.667" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="2 67.81 252 112.38" x="740.667" y="708" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title id="s116-title">Kommando — Doppel, symbol</title>
+  <g id="s116-symbol" transform="translate(20 23.99) scale(0.6391)">
+    <path fill="#000" d="M 0 210 L 0 151 A 48 48 0 0 1 96 151 L 96 210 L 70 210 L 70 151 A 22 22 0 0 0 26 151 L 26 210 Z M 70 210 L 70 151 A 48 48 0 0 1 166 151 L 166 210 L 140 210 L 140 151 A 22 22 0 0 0 96 151 L 96 210 Z"/>
+    <path fill="#000" d="M 172 210 L 172 151 A 48 48 0 0 1 268 151 L 268 210 L 242 210 L 242 151 A 22 22 0 0 0 198 151 L 198 210 Z M 242 210 L 242 151 A 48 48 0 0 1 338 151 L 338 210 L 312 210 L 312 151 A 22 22 0 0 0 268 151 L 268 210 Z"/>
+  </g>
+</svg>
+</g><text x="748.667" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="592.6666666666667" y="780" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">B · Doppel</text><text x="592.6666666666667" y="814" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Le double m est le signe : l&#x27;orthographe de</text><text x="592.6666666666667" y="840" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Kommando, et rien d&#x27;autre.</text><rect x="1065.33" y="150" width="474.667" height="774" rx="18" fill="#fff" stroke="#e4e4e0" stroke-width="1"/><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="0 0 256 256" x="1095.33" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title id="c2-title">Kommando — Intervalle, symbol</title>
+  <g id="c2-symbol" transform="translate(42.97 125) scale(0.85892)">
+    <path fill="#000" d="M 0 -116.43 L 62 -116.43 L 62 116.43 L 0 116.43 Z"/>
+    <path fill="#000" d="M 102 -13 L 102 -61 L 198 -116.43 L 198 -68.43 Z"/>
+    <path fill="#000" d="M 102 13 L 102 61 L 198 116.43 L 198 68.43 Z"/>
+  </g>
+</svg>
+</g><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="0 0 1301 256" x="1095.33" y="514" width="414.667" height="120" preserveAspectRatio="xMidYMid meet">
+  <title id="l2-title">Kommando — Intervalle, lockup</title>
+  <g id="l2-symbol" transform="translate(41.57 123.66) scale(0.67103)">
+      <path fill="#000" d="M 0 -116.43 L 62 -116.43 L 62 116.43 L 0 116.43 Z"/>
+      <path fill="#000" d="M 102 -13 L 102 -61 L 198 -116.43 L 198 -68.43 Z"/>
+      <path fill="#000" d="M 102 13 L 102 61 L 198 116.43 L 198 68.43 Z"/>
+  </g>
+  <g id="l2-wordmark" transform="translate(248 0)">
+    <path fill="#000" fill-rule="nonzero" d="M 0 74 L 28 74 L 114.46 74 L 114.46 82.08 L 28 132 L 28 152 L 114.46 201.92 L 114.46 210 L 28 210 L 0 210 Z"/>
+    <path fill="#000" fill-rule="evenodd" d="M 240.46 160 A 57 57 0 1 1 126.46 160 A 57 57 0 1 1 240.46 160 Z M 214.46 160 A 31 31 0 1 0 152.46 160 A 31 31 0 1 0 214.46 160 Z"/>
+    <path fill="#000" fill-rule="nonzero" d="M 250.46 210 L 250.46 151 A 48 48 0 0 1 346.46 151 L 346.46 210 L 320.46 210 L 320.46 151 A 22 22 0 0 0 276.46 151 L 276.46 210 Z M 320.46 210 L 320.46 151 A 48 48 0 0 1 416.46 151 L 416.46 210 L 390.46 210 L 390.46 151 A 22 22 0 0 0 346.46 151 L 346.46 210 Z"/>
+    <path fill="#000" fill-rule="nonzero" d="M 432.46 210 L 432.46 151 A 48 48 0 0 1 528.46 151 L 528.46 210 L 502.46 210 L 502.46 151 A 22 22 0 0 0 458.46 151 L 458.46 210 Z M 502.46 210 L 502.46 151 A 48 48 0 0 1 598.46 151 L 598.46 210 L 572.46 210 L 572.46 151 A 22 22 0 0 0 528.46 151 L 528.46 210 Z"/>
+    <path fill="#000" fill-rule="nonzero" d="M 672.46 110 L 698.46 110 L 698.46 217 L 672.46 217 Z M 696.46 173 A 44 44 0 1 1 608.46 173 A 44 44 0 1 1 696.46 173 Z M 670.46 173 A 18 18 0 1 0 634.46 173 A 18 18 0 1 0 670.46 173 Z M 608.46 110 L 672.46 110 L 672.46 136 L 608.46 136 Z"/>
+    <path fill="#000" fill-rule="nonzero" d="M 706.46 210 L 706.46 151 A 48 48 0 0 1 802.46 151 L 802.46 210 L 776.46 210 L 776.46 151 A 22 22 0 0 0 732.46 151 L 732.46 210 Z"/>
+    <path fill="#000" fill-rule="evenodd" d="M 924.46 160 A 57 57 0 1 1 810.46 160 A 57 57 0 1 1 924.46 160 Z M 898.46 160 A 31 31 0 1 0 836.46 160 A 31 31 0 1 0 898.46 160 Z M 899.46 74 L 925.46 74 L 925.46 210 L 899.46 210 Z"/>
+    <path fill="#000" fill-rule="evenodd" d="M 1045.46 160 A 57 57 0 1 1 931.46 160 A 57 57 0 1 1 1045.46 160 Z M 1019.46 160 A 31 31 0 1 0 957.46 160 A 31 31 0 1 0 1019.46 160 Z"/>
+  </g>
+</svg>
+</g><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="0 0 256 256" x="1095.33" y="660" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title id="s264-title">Kommando — Intervalle, symbol</title>
+  <g id="s264-symbol" transform="translate(42.97 125) scale(0.85892)">
+    <path fill="#000" d="M 0 -116.43 L 62 -116.43 L 62 116.43 L 0 116.43 Z"/>
+    <path fill="#000" d="M 102 -13 L 102 -61 L 198 -116.43 L 198 -68.43 Z"/>
+    <path fill="#000" d="M 102 13 L 102 61 L 198 116.43 L 198 68.43 Z"/>
+  </g>
+</svg>
+</g><text x="1127.33" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="0 0 256 256" x="1185.33" y="692" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title id="s232-title">Kommando — Intervalle, symbol</title>
+  <g id="s232-symbol" transform="translate(42.97 125) scale(0.85892)">
+    <path fill="#000" d="M 0 -116.43 L 62 -116.43 L 62 116.43 L 0 116.43 Z"/>
+    <path fill="#000" d="M 102 -13 L 102 -61 L 198 -116.43 L 198 -68.43 Z"/>
+    <path fill="#000" d="M 102 13 L 102 61 L 198 116.43 L 198 68.43 Z"/>
+  </g>
+</svg>
+</g><text x="1201.33" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g filter="url(#grey)"><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title" viewBox="0 0 256 256" x="1243.33" y="708" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title id="s216-title">Kommando — Intervalle, symbol</title>
+  <g id="s216-symbol" transform="translate(42.97 125) scale(0.85892)">
+    <path fill="#000" d="M 0 -116.43 L 62 -116.43 L 62 116.43 L 0 116.43 Z"/>
+    <path fill="#000" d="M 102 -13 L 102 -61 L 198 -116.43 L 198 -68.43 Z"/>
+    <path fill="#000" d="M 102 13 L 102 61 L 198 116.43 L 198 68.43 Z"/>
+  </g>
+</svg>
+</g><text x="1251.33" y="744" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="1095.3333333333335" y="780" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">C · Intervalle</text><text x="1095.3333333333335" y="814" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">La tige et le chevron laissent un temps :</text><text x="1095.3333333333335" y="840" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">le silence avant de répondre.</text></svg>

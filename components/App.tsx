@@ -1,6 +1,5 @@
 "use client"
 
-import { flushSync } from "react-dom"
 import { useEffect, useRef, useState } from "react"
 import { Moon, Sun } from "lucide-react"
 import { Dashboard } from "@/components/Dashboard"
@@ -21,17 +20,6 @@ export function App() {
       </SpeechProvider>
     </ProgressProvider>
   )
-}
-
-function transition(update: () => void) {
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  if (!reduce && typeof document.startViewTransition === "function") {
-    document.startViewTransition(() => {
-      flushSync(update)
-    })
-    return
-  }
-  update()
 }
 
 function ThemeButton() {
@@ -69,18 +57,14 @@ function Stage() {
   }, [tab, dayId])
 
   function openDay(id: DayId) {
-    transition(() => {
-      setActiveDay(id)
-      markOpened(id)
-      setTab("lesson")
-    })
+    setActiveDay(id)
+    markOpened(id)
+    setTab("lesson")
   }
 
   function changeTab(next: Tab) {
-    transition(() => {
-      if (next === "lesson") markOpened(dayId)
-      setTab(next)
-    })
+    if (next === "lesson") markOpened(dayId)
+    setTab(next)
   }
 
   return (

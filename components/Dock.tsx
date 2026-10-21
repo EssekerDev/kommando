@@ -11,8 +11,26 @@ const items: { id: Tab; label: string; icon: typeof House }[] = [
   { id: "voice", label: "Voix", icon: AudioLines },
 ]
 
-const LENS = 104
+const LENS_W = 136
+const LENS_H = 88
 const MAG = 2.05
+
+function droplet(vx: number, flat: number, opacity: number) {
+  const t = opacity > 0.04 ? performance.now() : 0
+  const wobble = Math.sin(t / 340) * 16
+  const wobble2 = Math.cos(t / 490) * 12
+  const stretch = Math.max(-24, Math.min(24, vx * 1.5))
+  const clamp = (n: number) => Math.max(22, Math.min(78, n))
+  const tl = clamp(72 + wobble - stretch + flat * 6)
+  const tr = clamp(40 - wobble * 0.45 + stretch + flat * 4)
+  const br = clamp(30 + wobble2 * 0.35 + stretch * 0.35 - flat * 4)
+  const bl = clamp(64 - wobble2 - stretch * 0.3)
+  const yt = clamp(66 + wobble2 * 0.25 - flat * 22)
+  const yr = clamp(34 - wobble * 0.4 + flat * 6)
+  const yb = clamp(42 + wobble * 0.2 - flat * 14)
+  const yl = clamp(74 + wobble * 0.3 - flat * 8)
+  return `${tl}% ${tr}% ${br}% ${bl}% / ${yt}% ${yr}% ${yb}% ${yl}%`
+}
 
 function phoneBar() {
   const wide = window.matchMedia("(min-width: 1100px)").matches
@@ -61,8 +79,12 @@ export function Dock({
     lens.style.opacity = motion.opacity.toFixed(3)
     lens.style.visibility = motion.opacity < 0.02 ? "hidden" : "visible"
     lens.style.setProperty("--warp", Math.min(1, motion.warp / 14).toFixed(3))
-    const flatY = 1 - motion.flat * 0.72
-    lens.style.transform = `translate3d(${motion.x - LENS / 2}px, -50%, 0) scale(${motion.scale}, ${motion.scale * flatY})`
+    const flow = Math.min(0.42, Math.abs(motion.vx) * 0.022)
+    const tilt = Math.max(-9, Math.min(9, motion.vx * 0.32))
+    const sx = motion.scale * (1 + flow + motion.flat * 0.95)
+    const sy = motion.scale * (1 - flow * 0.4) * (1 - motion.flat * 0.7)
+    lens.style.transform = `translate3d(${motion.x - LENS_W / 2}px, -42%, 0) rotate(${tilt}deg) scale(${sx}, ${sy})`
+    lens.style.borderRadius = droplet(motion.vx, motion.flat, motion.opacity)
 
     const skew = Math.max(-9, Math.min(9, motion.vx * 0.34))
     const squash = 1 - Math.min(0.08, Math.abs(motion.vx) * 0.006)
@@ -73,8 +95,8 @@ export function Dock({
       const shift = Number(node.dataset.shift || 0)
       node.style.width = `${rect.width}px`
       node.style.height = `${rect.height}px`
-      node.style.left = `${LENS / 2 - motion.x}px`
-      node.style.top = `${LENS / 2 - focusY}px`
+      node.style.left = `${LENS_W / 2 - motion.x}px`
+      node.style.top = `${LENS_H / 2 - focusY}px`
       node.style.transformOrigin = `${motion.x}px ${focusY}px`
       node.style.transform = shift
         ? `translate3d(${shift * ca}px, ${shift * ca * 0.2}px, 0) ${base}`
@@ -104,7 +126,7 @@ export function Dock({
       }
       const box = button.getBoundingClientRect()
       const center = box.left + box.width / 2 - rect.left
-      const cover = Math.max(0, 1 - Math.abs(center - motion.x) / (LENS * 0.46))
+      const cover = Math.max(0, 1 - Math.abs(center - motion.x) / (LENS_W * 0.42))
       button.style.opacity = (1 - cover * Math.min(1, motion.opacity)).toFixed(3)
     })
 

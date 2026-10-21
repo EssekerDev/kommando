@@ -14,7 +14,7 @@ Docker Desktop doit être ouvert. Depuis le dossier du projet :
 docker compose up -d --build
 ```
 
-Puis ouvre [http://127.0.0.1:3847](http://127.0.0.1:3847).
+Puis ouvre [http://192.168.0.103:3847](http://192.168.0.103:3847), ou [https://kommando.esseker.fr](https://kommando.esseker.fr) une fois Caddy en place.
 
 Depuis zéro, la même chose en une ligne :
 
@@ -22,11 +22,11 @@ Depuis zéro, la même chose en une ligne :
 git clone https://github.com/EssekerDev/kommando.git && cd kommando && docker compose up -d --build
 ```
 
-Cette commande ne crée que le conteneur `kommando-web`, sur le réseau `kommando_internal`, publié uniquement en `127.0.0.1:3847`. Elle n’arrête pas les autres conteneurs.
+Cette commande ne crée que le conteneur `kommando-web`, sur le réseau `kommando_internal`, publié en `192.168.0.103:3847` pour que Caddy puisse le joindre. Elle n’arrête pas les autres conteneurs.
 
 Arrêt de Kommando seul : `docker compose stop`.
 
-Si le port 3847 est déjà pris, rien n’est lancé. Change alors uniquement le port hôte dans `docker-compose.yml` (`127.0.0.1:3848:3847`) et relance la même commande. Le script `./scripts/docker-up.sh` fait la même chose et affiche les conteneurs déjà ouverts avant de démarrer.
+Si le port 3847 est déjà pris par autre chose que Kommando, rien n’est lancé. Change alors le port hôte dans `docker-compose.yml` (`192.168.0.103:3848:3847`) et le même port dans le bloc Caddy, puis relance. Le script `./scripts/docker-up.sh` fait la même chose et affiche les conteneurs déjà ouverts avant de démarrer. Pour republier un Kommando déjà lancé, utilise `docker compose up -d` : le script s’arrête dès que 3847 est occupé.
 
 ## Lancer sans Docker
 

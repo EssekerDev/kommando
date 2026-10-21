@@ -22,7 +22,7 @@ if port_busy; then
     lsof -nP -iTCP:3847 -sTCP:LISTEN || true
   fi
   echo "Si ce n'est pas Kommando, change la partie gauche du port dans docker-compose.yml,"
-  echo "par exemple \"127.0.0.1:3848:3847\", puis relance."
+  echo "par exemple \"192.168.0.103:3848:3847\", puis le même port dans Caddy, et relance."
   exit 1
 fi
 

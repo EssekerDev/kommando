@@ -1,0 +1,39 @@
+{
+  "brand": "Kommando",
+  "tagline": "Allemand en cinq jours",
+  "brief": "Une application pour un adulte francophone qui apprend l’allemand de Suisse en cinq jours, sur iPhone. Le ton est précis, calme et intense. Pas un costume militaire, pas une appli de langues générique.",
+  "adjectives": ["précis", "calme", "intense", "géométrique"],
+  "criteria": "Succès : reconnaissable à 16 px, lisible en une couleur, distinct des drapeaux, des bulles et des chevrons militaires, et fidèle au noir déjà présent dans l’app.",
+  "industry": "consumer-app",
+  "nav": ["Parcours", "Écoute", "Drills"],
+  "brand_color": "#1C1C1E",
+  "tile_color": "#1C1C1E",
+  "greyscale": false,
+  "final": true,
+  "deck_title": "identité finale",
+  "concepts": [
+    {
+      "name": "Intervalle",
+      "symbol": "kit/symbol.svg",
+      "lockup": "kit/horizontal.svg",
+      "stacked": "kit/stacked.svg",
+      "avatar": "kit/symbol-small.svg",
+      "symbol_on_tile": "kit/symbol-small-white.svg",
+      "symbol_on_dark": "kit/symbol-reversed.svg",
+      "lockup_on_dark": "kit/horizontal-white.svg",
+      "stacked_on_dark": "kit/stacked-white.svg",
+      "idea": "Une hampe et un chevron à 30°, séparés par le silence avant de répondre.",
+      "rationale": [
+        "La pause est la signature : elle reste ouverte à 16 px, là où un détail plus fin disparaîtrait.",
+        "Encre reprend le noir de l’app. Le bleu reste un signal d’interface, pas une couleur de logo.",
+        "Le nom est dessiné, pas tapé : mêmes 30°, mêmes terminaux plats, sans deuxième pause."
+      ]
+    }
+  ],
+  "recommendation": "Intervalle est la direction retenue. Le symbole, le nom, les deux verrouillages, la petite taille et l’icône sont dans brand/kit et brand/digital. Le guide d’usage est brand/GUIDE.md.",
+  "next_steps": [
+    "Maîtres vectoriels dans brand/kit. Déclinaisons écran dans brand/digital.",
+    "L’icône de l’app utilise le dessin petite taille, blanc sur Encre.",
+    "Une recherche d’antériorité reste à faire avant tout dépôt de marque. Rien ici ne la garantit."
+  ]
+}

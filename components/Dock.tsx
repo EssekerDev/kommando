@@ -11,8 +11,8 @@ const items: { id: Tab; label: string; icon: typeof House }[] = [
   { id: "voice", label: "Voix", icon: AudioLines },
 ]
 
-const LENS = 92
-const MAG = 1.92
+const LENS = 104
+const MAG = 2.05
 
 function phoneBar() {
   const wide = window.matchMedia("(min-width: 1100px)").matches
@@ -49,6 +49,7 @@ export function Dock({
     flatV: 0,
     targetFlat: 0,
     melt: false,
+    hot: -1,
   })
 
   function paint() {
@@ -60,14 +61,14 @@ export function Dock({
     lens.style.opacity = motion.opacity.toFixed(3)
     lens.style.visibility = motion.opacity < 0.02 ? "hidden" : "visible"
     lens.style.setProperty("--warp", Math.min(1, motion.warp / 14).toFixed(3))
-    const flatY = 1 - motion.flat * 0.66
-    lens.style.transform = `translate3d(${motion.x - LENS / 2}px, -62%, 0) scale(${motion.scale}, ${motion.scale * flatY})`
+    const flatY = 1 - motion.flat * 0.72
+    lens.style.transform = `translate3d(${motion.x - LENS / 2}px, -50%, 0) scale(${motion.scale}, ${motion.scale * flatY})`
 
     const skew = Math.max(-9, Math.min(9, motion.vx * 0.34))
     const squash = 1 - Math.min(0.08, Math.abs(motion.vx) * 0.006)
     const ca = 2.2 + Math.min(5.5, Math.abs(motion.vx) * 0.32)
     const base = `scale(${motion.inner}) scaleY(${squash}) skewX(${skew}deg)`
-    const focusY = rect.height * 0.4
+    const focusY = rect.height * 0.42
     lens.querySelectorAll<HTMLElement>(".lens-clone").forEach((node) => {
       const shift = Number(node.dataset.shift || 0)
       node.style.width = `${rect.width}px`
@@ -83,15 +84,32 @@ export function Dock({
     const sheen = lens.querySelector<HTMLElement>(".lens-sheen")
     if (sheen) sheen.style.transform = `translate(${(-skew * 1.4).toFixed(2)}px, 0)`
 
-    dock.querySelectorAll<HTMLElement>(":scope > button").forEach((button) => {
+    const activeIndex = motion.hot >= 0 ? motion.hot : items.findIndex((item) => item.id === tab)
+    const tint = (node: Element, on: boolean) => {
+      const color = on ? "var(--signal)" : "var(--label-2)"
+      const icon = node.querySelector("svg")
+      const label = node.querySelector("span")
+      if (icon instanceof SVGElement) {
+        icon.style.color = color
+        icon.style.stroke = color
+      }
+      if (label instanceof HTMLElement) label.style.color = color
+    }
+
+    dock.querySelectorAll<HTMLElement>("button").forEach((button, index) => {
+      tint(button, index === activeIndex)
       if (motion.opacity < 0.02) {
         button.style.opacity = ""
         return
       }
       const box = button.getBoundingClientRect()
       const center = box.left + box.width / 2 - rect.left
-      const cover = Math.max(0, 1 - Math.abs(center - motion.x) / (LENS * 0.58))
+      const cover = Math.max(0, 1 - Math.abs(center - motion.x) / (LENS * 0.46))
       button.style.opacity = (1 - cover * Math.min(1, motion.opacity)).toFixed(3)
+    })
+
+    lens.querySelectorAll<HTMLElement>(".lens-face").forEach((face, index) => {
+      tint(face, index % items.length === activeIndex)
     })
   }
 
@@ -141,9 +159,17 @@ export function Dock({
     else {
       raf.current = 0
       motion.melt = false
+      motion.hot = -1
       if (lensRef.current) lensRef.current.style.visibility = "hidden"
-      dockRef.current?.querySelectorAll<HTMLElement>("scope > button").forEach((button) => {
+      dockRef.current?.querySelectorAll<HTMLElement>("button").forEach((button) => {
         button.style.opacity = ""
+        const icon = button.querySelector("svg")
+        const label = button.querySelector("span")
+        if (icon instanceof SVGElement) {
+          icon.style.removeProperty("color")
+          icon.style.removeProperty("stroke")
+        }
+        if (label instanceof HTMLElement) label.style.removeProperty("color")
       })
     }
   }
@@ -182,6 +208,7 @@ export function Dock({
     motion.targetScale = 1
     motion.targetInner = MAG
     motion.targetFlat = 0
+    motion.hot = indexAt(x)
     motion.opacity = Math.max(motion.opacity, 0.04)
     event.currentTarget.setPointerCapture(event.pointerId)
     wake()
@@ -189,7 +216,9 @@ export function Dock({
 
   function onPointerMove(event: React.PointerEvent<HTMLElement>) {
     if (!live.current.dragging) return
-    live.current.targetX = localX(event.clientX)
+    const x = localX(event.clientX)
+    live.current.targetX = x
+    live.current.hot = indexAt(x)
   }
 
   function onPointerUp(event: React.PointerEvent<HTMLElement>) {
@@ -201,7 +230,9 @@ export function Dock({
     const x = localX(event.clientX)
     const index = indexAt(x)
     const near = Math.abs(event.clientY - (rect.top + rect.height / 2)) < rect.height * 1.6
-    motion.homeX = ((index + 0.5) * rect.width) / items.length
+    const commit = near ? index : Math.max(0, items.findIndex((item) => item.id === tab))
+    motion.hot = commit
+    motion.homeX = ((commit + 0.5) * rect.width) / items.length
     motion.targetX = motion.homeX
     motion.targetInner = 1
     motion.targetFlat = 1
@@ -239,9 +270,7 @@ export function Dock({
             strokeWidth={active ? 2.15 : 1.7}
             color={active ? "var(--signal)" : "var(--label-2)"}
           />
-          <span className="lens-label" style={{ visibility: "hidden" }}>
-            {item.label}
-          </span>
+          <span className="lens-label">{item.label}</span>
         </span>
       )
     })

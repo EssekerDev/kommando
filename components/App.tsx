@@ -1,5 +1,6 @@
 "use client"
 
+import { flushSync } from "react-dom"
 import { useEffect, useRef, useState } from "react"
 import { Moon, Sun } from "lucide-react"
 import { Dashboard } from "@/components/Dashboard"
@@ -22,6 +23,40 @@ export function App() {
   )
 }
 
+function transition(update: () => void) {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  if (!reduce && typeof document.startViewTransition === "function") {
+    document.startViewTransition(() => {
+      flushSync(update)
+    })
+    return
+  }
+  update()
+}
+
+function ThemeButton() {
+  function toggleTheme() {
+    const next = !document.documentElement.classList.contains("dark")
+    document.documentElement.classList.toggle("dark", next)
+    document.documentElement.style.colorScheme = next ? "dark" : "light"
+    document.documentElement.style.background = next ? "#000000" : "#F3F1EC"
+    localStorage.setItem(THEME_KEY, next ? "dark" : "light")
+  }
+
+  return (
+    <button
+      type="button"
+      className="press grid size-11 place-items-center rounded-full"
+      style={{ background: "var(--soft)" }}
+      aria-label="Changer l’apparence"
+      onClick={toggleTheme}
+    >
+      <Sun className="col-start-1 row-start-1 hidden size-5 dark:block" strokeWidth={1.8} />
+      <Moon className="col-start-1 row-start-1 size-5 dark:hidden" strokeWidth={1.8} />
+    </button>
+  )
+}
+
 function Stage() {
   const { state, setActiveDay, markOpened } = useProgress()
   const [tab, setTab] = useState<Tab>("home")
@@ -34,64 +69,56 @@ function Stage() {
   }, [tab, dayId])
 
   function openDay(id: DayId) {
-    setActiveDay(id)
-    markOpened(id)
-    setTab("lesson")
+    transition(() => {
+      setActiveDay(id)
+      markOpened(id)
+      setTab("lesson")
+    })
   }
 
-  function toggleTheme() {
-    const next = !document.documentElement.classList.contains("dark")
-    document.documentElement.classList.toggle("dark", next)
-    document.documentElement.style.colorScheme = next ? "dark" : "light"
-    document.documentElement.style.background = next ? "#000000" : "#F3F1EC"
-    localStorage.setItem(THEME_KEY, next ? "dark" : "light")
+  function changeTab(next: Tab) {
+    transition(() => {
+      if (next === "lesson") markOpened(dayId)
+      setTab(next)
+    })
   }
 
   return (
     <div className="stage">
       <div className="shell">
-        <div className="island" aria-hidden="true" />
-        <div className="scroller" ref={scrollerRef}>
-          <div className="mb-3 flex h-11 items-center justify-between">
-            <p className="text-[12px] font-semibold tracking-[0.18em] uppercase">Kommando</p>
-            <button
-              type="button"
-              className="press grid size-11 place-items-center rounded-full"
-              style={{ background: "var(--soft)" }}
-              aria-label="Changer l’apparence"
-              onClick={toggleTheme}
-            >
-              <Sun className="col-start-1 row-start-1 hidden size-5 dark:block" strokeWidth={1.8} />
-              <Moon className="col-start-1 row-start-1 size-5 dark:hidden" strokeWidth={1.8} />
-            </button>
+        <aside className="rail">
+          <div className="rail-head">
+            <p className="text-[17px] font-semibold tracking-[-0.03em]">Kommando</p>
+            <ThemeButton />
           </div>
-
-          {tab === "home" && <Dashboard onOpenDay={openDay} />}
-          {tab === "lesson" && (
-            <DayView
-              dayId={dayId}
-              onSelectDay={openDay}
-              onDrill={() => setTab("drill")}
-            />
-          )}
-          {tab === "drill" && (
-            <ExerciseView
-              key={dayId}
-              dayId={dayId}
-              onLesson={() => setTab("lesson")}
-              onNextDay={() => openDay((dayId + 1) as DayId)}
-            />
-          )}
-          {tab === "voice" && <ListenView />}
+          <Dock tab={tab} onChange={changeTab} />
+          <p className="rail-foot">Allemand suisse, forme Sie, cinq jours.</p>
+        </aside>
+        <div className="scroller" ref={scrollerRef}>
+          <div className="phone-bar">
+            <p className="text-[15px] font-semibold tracking-[-0.03em]">Kommando</p>
+            <ThemeButton />
+          </div>
+          <div className="sheet">
+            {tab === "home" && <Dashboard onOpenDay={openDay} />}
+            {tab === "lesson" && (
+              <DayView
+                dayId={dayId}
+                onSelectDay={openDay}
+                onDrill={() => changeTab("drill")}
+              />
+            )}
+            {tab === "drill" && (
+              <ExerciseView
+                key={dayId}
+                dayId={dayId}
+                onLesson={() => changeTab("lesson")}
+                onNextDay={() => openDay((dayId + 1) as DayId)}
+              />
+            )}
+            {tab === "voice" && <ListenView />}
+          </div>
         </div>
-        <Dock
-          tab={tab}
-          onChange={(next) => {
-            if (next === "lesson") markOpened(dayId)
-            setTab(next)
-          }}
-        />
-        <div className="home-indicator" aria-hidden="true" />
       </div>
     </div>
   )

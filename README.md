@@ -1,6 +1,6 @@
 # Kommando
 
-Programme intensif d’allemand en cinq jours. Fiches, script oral, drill et synthèse vocale, dans une interface calée sur l’iPhone 18 Pro Max (440 × 956 pt, Dynamic Island, safe areas 62 pt / 34 pt).
+Programme intensif d’allemand en cinq jours. Fiches, script oral, drill et synthèse vocale. Sur iPhone, l’app occupe l’écran et respecte les safe areas. Sur un ordinateur, elle occupe la fenêtre, avec une barre latérale.
 
 L’orthographe est suisse (`heisse`, `Grüssen`). La forme travaillée est `Sie`.
 

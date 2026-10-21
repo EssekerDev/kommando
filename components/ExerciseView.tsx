@@ -41,10 +41,7 @@ export function ExerciseView({
   const [attempt, setAttempt] = useState(0)
 
   const drill = day.drills[index]
-  const bank = useMemo(
-    () => (drill?.kind === "order" ? shuffle(drill.answer) : []),
-    [drill]
-  )
+  const bank = useMemo(() => (drill?.kind === "order" ? shuffle(drill.answer) : []), [drill])
 
   function resetQuestion() {
     setPicked(null)
@@ -62,9 +59,8 @@ export function ExerciseView({
 
   function advance(wasCorrect: boolean) {
     const nextCorrect = correctCount + (wasCorrect ? 1 : 0)
-    const nextMisses = wasCorrect || !drill
-      ? misses
-      : [...misses, { prompt: drill.prompt, why: drill.why }]
+    const nextMisses =
+      wasCorrect || !drill ? misses : [...misses, { prompt: drill.prompt, why: drill.why }]
     if (index === day.drills.length - 1) {
       finish(nextCorrect, nextMisses)
       return
@@ -78,12 +74,10 @@ export function ExerciseView({
   function grade(wasCorrect: boolean) {
     if (checked) return
     setChecked(true)
-    if (!wasCorrect) {
-      try {
-        navigator.vibrate?.(12)
-      } catch {
-        /* haptics are optional */
-      }
+    try {
+      navigator.vibrate?.(wasCorrect ? 10 : [14, 60, 14])
+    } catch {
+      /* haptics are optional */
     }
   }
 
@@ -105,7 +99,9 @@ export function ExerciseView({
         <header>
           <h1 className="text-[34px] leading-none font-semibold tracking-[-0.03em] tabular-nums">
             {correctCount}
-            <span className="text-[22px] font-medium text-[var(--label-2)]">/{day.drills.length}</span>
+            <span className="text-[22px] font-medium text-[var(--label-2)]">
+              /{day.drills.length}
+            </span>
           </h1>
           <p className="mt-3 text-[17px] leading-6">
             {solid
@@ -134,10 +130,22 @@ export function ExerciseView({
               Ouvrir le jour {day.id + 1}
             </Button>
           )}
-          <Button type="button" variant="outline" size="touch" className="press w-full bg-transparent" onClick={restart}>
+          <Button
+            type="button"
+            variant="outline"
+            size="touch"
+            className="press w-full bg-transparent"
+            onClick={restart}
+          >
             Refaire le drill
           </Button>
-          <Button type="button" variant="ghost" size="touch" className="press w-full" onClick={onLesson}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="touch"
+            className="press w-full"
+            onClick={onLesson}
+          >
             Retour aux fiches
           </Button>
         </div>
@@ -155,7 +163,7 @@ export function ExerciseView({
   const isCorrect = drill.kind === "order" ? orderCorrect : choiceCorrect
 
   return (
-    <div className="flex flex-col gap-4 pb-4" key={attempt}>
+    <div className="drill flex flex-col gap-4 pb-2" key={attempt}>
       <header>
         <div className="flex items-baseline justify-between gap-3">
           <p className="text-[15px] font-medium text-[var(--label-2)]">
@@ -203,7 +211,10 @@ export function ExerciseView({
               : "color-mix(in oklab, var(--bad) 14%, transparent)",
           }}
         >
-          <p className="text-[15px] font-semibold" style={{ color: isCorrect ? "var(--good)" : "var(--bad)" }}>
+          <p
+            className="text-[15px] font-semibold"
+            style={{ color: isCorrect ? "var(--good)" : "var(--bad)" }}
+          >
             {isCorrect ? "C’est juste." : "Pas encore."}
           </p>
           <p className="mt-1 text-[15px] leading-6">{drill.why}</p>
@@ -214,7 +225,7 @@ export function ExerciseView({
         <Button
           type="button"
           size="touch"
-          className="press lift w-full"
+          className="press w-full"
           disabled={placed.length !== drill.answer.length}
           onClick={() => grade(orderCorrect)}
         >
@@ -226,7 +237,7 @@ export function ExerciseView({
         <Button
           type="button"
           size="touch"
-          className="press lift w-full"
+          className="press w-full"
           onClick={() => advance(isCorrect)}
         >
           {index === day.drills.length - 1 ? "Voir le score" : "Continuer"}
@@ -264,7 +275,7 @@ function Question({
   }
 
   return (
-    <div>
+    <div className="flex flex-1 flex-col">
       <h1 className="text-[22px] leading-7 font-semibold tracking-[-0.02em]">{drill.prompt}</h1>
       {drill.hint && <p className="mt-1 text-[15px] text-[var(--label-2)]">{drill.hint}</p>}
       {drill.kind === "choice" && drill.speak && (
@@ -275,7 +286,7 @@ function Question({
       )}
 
       {drill.kind === "choice" && (
-        <div className="mt-4 flex flex-col gap-2" role="group" aria-label="Réponses">
+        <div className="mt-auto flex flex-col gap-2 pt-6" role="group" aria-label="Réponses">
           {drill.options.map((option) => {
             const selected = picked === option.id
             const showCorrect = checked && option.id === drill.answer
@@ -286,7 +297,11 @@ function Question({
                 type="button"
                 className="press min-h-14 rounded-2xl border px-4 py-3 text-left text-[17px] leading-6 font-medium"
                 style={{
-                  borderColor: showCorrect ? "var(--good)" : showWrong ? "var(--bad)" : "var(--line)",
+                  borderColor: showCorrect
+                    ? "var(--good)"
+                    : showWrong
+                      ? "var(--bad)"
+                      : "var(--line)",
                   background: showCorrect
                     ? "color-mix(in oklab, var(--good) 16%, transparent)"
                     : showWrong
@@ -308,7 +323,7 @@ function Question({
       )}
 
       {drill.kind === "order" && (
-        <div className="mt-4">
+        <div className="mt-4 flex flex-1 flex-col">
           <div
             className="flex min-h-[4.5rem] flex-wrap gap-2 rounded-3xl border border-dashed p-3"
             style={{ borderColor: "var(--line)" }}
@@ -331,7 +346,7 @@ function Question({
               </button>
             ))}
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-auto flex flex-wrap gap-2 pt-6">
             {remaining.map((token) => (
               <button
                 key={token}

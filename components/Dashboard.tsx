@@ -13,11 +13,33 @@ function greeting(hour: number) {
   return "Guten Abend"
 }
 
-export function Dashboard({
-  onOpenDay,
-}: {
-  onOpenDay: (day: DayId) => void
-}) {
+function Ring({ value }: { value: number }) {
+  const r = 19
+  const c = 2 * Math.PI * r
+  return (
+    <span className="relative grid size-12 shrink-0 place-items-center" aria-hidden="true">
+      <svg viewBox="0 0 48 48" className="absolute inset-0 size-12 -rotate-90">
+        <circle cx="24" cy="24" r={r} fill="none" stroke="var(--soft)" strokeWidth="5" />
+        {value > 0 && (
+          <circle
+            cx="24"
+            cy="24"
+            r={r}
+            fill="none"
+            stroke="var(--signal)"
+            strokeWidth="5"
+            strokeLinecap="round"
+            strokeDasharray={`${(c * value) / 5} ${c}`}
+            className="transition-[stroke-dasharray] duration-500"
+          />
+        )}
+      </svg>
+      <span className="text-[15px] font-semibold tabular-nums">{value}</span>
+    </span>
+  )
+}
+
+export function Dashboard({ onOpenDay }: { onOpenDay: (day: DayId) => void }) {
   const { state, setName } = useProgress()
   const hour = new Date().getHours()
 
@@ -37,48 +59,45 @@ export function Dashboard({
           {hello}
           {name ? `, ${name}` : ""}
         </h1>
-        <p className="mt-2 max-w-[42rem] text-[17px] leading-6 text-[var(--label-2)]">
+        <p className="mt-1 max-w-[42rem] text-[15px] leading-5 text-[var(--label-2)]">
           Cinq jours d’allemand suisse, à la forme Sie.
         </p>
       </header>
 
-      <section className="home-status" aria-labelledby="solid-heading">
-        <ol className="flex gap-1.5" aria-label={`${solid} jour${solid > 1 ? "s" : ""} solide${solid > 1 ? "s" : ""} sur 5`}>
-          {days.map((day) => {
-            const on = solidScore(state.best[day.id])
-            return (
-              <li
-                key={day.id}
-                className="h-1.5 flex-1 rounded-full"
-                style={{ background: on ? "var(--signal)" : "color-mix(in oklab, var(--ink) 12%, var(--canvas))" }}
-              />
-            )
-          })}
-        </ol>
-        <h2 id="solid-heading" className="mt-4 text-[22px] leading-7 font-semibold tracking-[-0.02em]">
-          {finished
-            ? "Les cinq jours sont solides."
-            : solid === 0
-              ? "Aucun jour solide."
-              : `${solid} jour${solid > 1 ? "s" : ""} solide${solid > 1 ? "s" : ""}.`}
-        </h2>
-        <p className="mt-1 text-[15px] leading-5 text-[var(--label-2)]">
-          {finished
-            ? "Les fiches restent ouvertes si une phrase accroche."
-            : `Six bonnes réponses sur huit rendent un jour solide. Le prochain est le jour ${next.id}.`}
-        </p>
+      <section
+        className="home-status inset flex items-center gap-3.5 p-3.5"
+        aria-labelledby="solid-heading"
+      >
+        <Ring value={solid} />
+        <div className="min-w-0 flex-1">
+          <p className="text-[13px] font-medium text-[var(--label-2)]">
+            {finished ? "Programme terminé" : solid === 0 ? "Pour commencer" : "Reprendre"}
+          </p>
+          <h2
+            id="solid-heading"
+            className="line-clamp-2 text-[17px] leading-[1.3] font-semibold tracking-[-0.01em]"
+          >
+            {finished ? "Les cinq jours sont solides" : `Jour ${next.id} · ${next.title}`}
+          </h2>
+          <p className="text-[13px] leading-5 text-[var(--label-2)]">
+            {solid} sur 5 solides · 6/8 au drill pour valider
+          </p>
+        </div>
         <Button
           type="button"
           size="touch"
-          className="press mt-4 h-11 px-4"
+          className="press h-11 shrink-0 rounded-full px-4"
           onClick={() => onOpenDay(finished ? 5 : next.id)}
         >
-          {finished ? "Revoir le jour 5" : `Ouvrir le jour ${next.id}`}
+          {finished ? "Revoir" : "Ouvrir"}
         </Button>
       </section>
 
       <section className="home-days" aria-labelledby="days-heading">
-        <h2 id="days-heading" className="mb-3 text-[22px] leading-7 font-semibold tracking-[-0.02em]">
+        <h2
+          id="days-heading"
+          className="mb-2 px-1 text-[13px] font-semibold tracking-[0.02em] text-[var(--label-2)] uppercase"
+        >
           Les cinq jours
         </h2>
         <ol className="inset">
@@ -87,21 +106,29 @@ export function Dashboard({
             const opened = state.opened.includes(day.id)
             const solidDay = solidScore(score)
             const status = solidDay
-              ? `Solide, ${score} %`
-              : opened
-                ? score !== undefined
-                  ? `En cours, ${score} %`
-                  : "Fiche ouverte"
-                : "Pas encore ouvert"
+              ? `${score} %`
+              : score !== undefined
+                ? `${score} %`
+                : opened
+                  ? "Ouvert"
+                  : `${day.minutes} min`
+            const statusLabel = solidDay
+              ? `solide, ${score} %`
+              : score !== undefined
+                ? `en cours, ${score} %`
+                : opened
+                  ? "fiche ouverte"
+                  : `pas encore ouvert, ${day.minutes} minutes`
             return (
               <li key={day.id} className="border-t border-[var(--line)] first:border-t-0">
                 <button
                   type="button"
-                  className="row press flex min-h-[76px] w-full items-center gap-3 px-3.5 py-3 text-left"
+                  className="row press flex min-h-[60px] w-full items-center gap-3 px-3 py-2 text-left"
+                  aria-label={`Jour ${day.id}, ${day.title}, ${statusLabel}`}
                   onClick={() => onOpenDay(day.id)}
                 >
                   <span
-                    className="grid size-11 shrink-0 place-items-center rounded-2xl text-[17px] font-semibold tabular-nums"
+                    className="grid size-9 shrink-0 place-items-center rounded-xl text-[15px] font-semibold tabular-nums"
                     style={{
                       background: solidDay ? "var(--signal)" : "var(--soft)",
                       color: solidDay ? "#fff" : "var(--ink)",
@@ -110,20 +137,25 @@ export function Dashboard({
                     {day.id}
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-[17px] leading-6 font-semibold tracking-[-0.01em]">
+                    <span className="block truncate text-[16px] leading-[1.35] font-semibold tracking-[-0.01em]">
                       {day.title}
                     </span>
-                    <span className="mt-0.5 block text-[13px] leading-5 text-[var(--label-2)]">
+                    <span className="block truncate text-[13px] leading-5 text-[var(--label-2)]">
                       {day.promise}
                     </span>
-                    <span
-                      className="mt-1 block text-[13px] font-medium"
-                      style={{ color: solidDay ? "var(--good)" : "var(--label-2)" }}
-                    >
-                      {status} · {day.minutes} min
-                    </span>
                   </span>
-                  <ChevronRight className="size-5 shrink-0 text-[var(--label-3)]" aria-hidden="true" />
+                  <span
+                    className="shrink-0 text-[13px] font-medium tabular-nums"
+                    style={{
+                      color: solidDay ? "var(--good)" : "var(--label-2)",
+                    }}
+                  >
+                    {status}
+                  </span>
+                  <ChevronRight
+                    className="-ml-1 size-[18px] shrink-0 text-[var(--label-3)]"
+                    aria-hidden="true"
+                  />
                 </button>
               </li>
             )

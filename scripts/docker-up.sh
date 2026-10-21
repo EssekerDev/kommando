@@ -13,7 +13,7 @@ port_busy() {
     return
   fi
   docker ps --format '{{.Ports}}' | grep -q '3847->'
-fi
+}
 
 if port_busy; then
   echo "Le port 3847 est déjà utilisé sur cette machine."

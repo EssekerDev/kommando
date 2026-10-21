@@ -1,0 +1,38 @@
+# Projet isolé. Ne gère que kommando-web.
+# Ne pas lancer avec --remove-orphans sur un autre projet.
+name: kommando
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kommando:local
+    container_name: kommando-web
+    init: true
+    ports:
+      - "127.0.0.1:3847:3847"
+    environment:
+      NODE_ENV: production
+      PORT: "3847"
+      HOSTNAME: 0.0.0.0
+      NEXT_TELEMETRY_DISABLED: "1"
+    restart: unless-stopped
+    networks:
+      - internal
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3847').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 25s
+
+networks:
+  internal:
+    name: kommando_internal

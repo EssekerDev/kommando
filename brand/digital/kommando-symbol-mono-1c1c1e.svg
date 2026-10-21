@@ -1,0 +1,8 @@
+<svg fill="#1c1c1e" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title"><title>Kommando</title>
+  <title id="title">Kommando</title>
+  <g id="symbol">
+  <path id="piece-0" fill="#1c1c1e" d="M 47.27 22 L 101.58 22 L 101.58 226 L 47.27 226 Z"/>
+  <path id="piece-1" fill="#1c1c1e" d="M 136.63 112.61 L 136.63 70.56 L 220.73 22 L 220.73 64.05 Z"/>
+  <path id="piece-2" fill="#1c1c1e" d="M 136.63 135.39 L 136.63 177.44 L 220.73 226 L 220.73 183.95 Z"/>
+  </g>
+</svg>

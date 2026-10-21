@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title">
+  <title id="title">Kommando, inversé</title>
+  <g id="symbol">
+  <path id="piece-0" fill="#FFFFFF" d="M 44.08 22 L 95.95 22 L 95.95 226 L 44.08 226 Z"/>
+  <path id="piece-1" fill="#FFFFFF" d="M 136.71 110.11 L 136.71 71.20 L 221.92 22 L 221.92 60.90 Z"/>
+  <path id="piece-2" fill="#FFFFFF" d="M 136.71 137.89 L 136.71 176.80 L 221.92 226 L 221.92 187.10 Z"/>
+  </g>
+</svg>

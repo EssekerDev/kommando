@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="2 67.81 252 112.38" width="252" height="112.38" role="img" aria-labelledby="title">
+  <title id="title">Kommando — Doppel, symbol</title>
+  <g id="symbol" transform="translate(20 23.99) scale(0.6391)">
+    <path fill="#000" d="M 0 210 L 0 151 A 48 48 0 0 1 96 151 L 96 210 L 70 210 L 70 151 A 22 22 0 0 0 26 151 L 26 210 Z M 70 210 L 70 151 A 48 48 0 0 1 166 151 L 166 210 L 140 210 L 140 151 A 22 22 0 0 0 96 151 L 96 210 Z"/>
+    <path fill="#000" d="M 172 210 L 172 151 A 48 48 0 0 1 268 151 L 268 210 L 242 210 L 242 151 A 22 22 0 0 0 198 151 L 198 210 Z M 242 210 L 242 151 A 48 48 0 0 1 338 151 L 338 210 L 312 210 L 312 151 A 22 22 0 0 0 268 151 L 268 210 Z"/>
+  </g>
+</svg>

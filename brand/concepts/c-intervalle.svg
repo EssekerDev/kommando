@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title">
+  <title id="title">Kommando — Intervalle, symbol</title>
+  <g id="symbol" transform="translate(42.97 125) scale(0.85892)">
+    <path fill="#000" d="M 0 -116.43 L 62 -116.43 L 62 116.43 L 0 116.43 Z"/>
+    <path fill="#000" d="M 102 -13 L 102 -61 L 198 -116.43 L 198 -68.43 Z"/>
+    <path fill="#000" d="M 102 13 L 102 61 L 198 116.43 L 198 68.43 Z"/>
+  </g>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="title">
+  <title id="title">Kommando, petite taille, blanc</title>
+  <g id="symbol">
+  <path id="piece-0" fill="#FFFFFF" d="M 45.53 18 L 108.26 18 L 108.26 230 L 45.53 230 Z"/>
+  <path id="piece-1" fill="#FFFFFF" d="M 152.35 105.35 L 152.35 56.18 L 218.47 18 L 218.47 67.17 Z"/>
+  <path id="piece-2" fill="#FFFFFF" d="M 152.35 142.65 L 152.35 191.82 L 218.47 230 L 218.47 180.83 Z"/>
+  </g>
+</svg>

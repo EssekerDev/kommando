@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useLayoutEffect, useRef } from "react"
 import { AudioLines, BookOpen, House, Target } from "lucide-react"
 import type { Tab } from "@/lib/types"
 
@@ -11,31 +11,21 @@ const items: { id: Tab; label: string; icon: typeof House }[] = [
   { id: "voice", label: "Voix", icon: AudioLines },
 ]
 
-const LENS_W = 136
-const LENS_H = 88
-const MAG = 2.05
-
-function droplet(vx: number, flat: number, opacity: number) {
-  const t = opacity > 0.04 ? performance.now() : 0
-  const wobble = Math.sin(t / 340) * 16
-  const wobble2 = Math.cos(t / 490) * 12
-  const stretch = Math.max(-24, Math.min(24, vx * 1.5))
-  const clamp = (n: number) => Math.max(22, Math.min(78, n))
-  const tl = clamp(72 + wobble - stretch + flat * 6)
-  const tr = clamp(40 - wobble * 0.45 + stretch + flat * 4)
-  const br = clamp(30 + wobble2 * 0.35 + stretch * 0.35 - flat * 4)
-  const bl = clamp(64 - wobble2 - stretch * 0.3)
-  const yt = clamp(66 + wobble2 * 0.25 - flat * 22)
-  const yr = clamp(34 - wobble * 0.4 + flat * 6)
-  const yb = clamp(42 + wobble * 0.2 - flat * 14)
-  const yl = clamp(74 + wobble * 0.3 - flat * 8)
-  return `${tl}% ${tr}% ${br}% ${bl}% / ${yt}% ${yr}% ${yb}% ${yl}%`
-}
+const MAG = 1.42
 
 function phoneBar() {
   const wide = window.matchMedia("(min-width: 1100px)").matches
   const desk = window.matchMedia("(min-width: 960px) and (pointer: fine)").matches
   return !(wide || desk)
+}
+
+function reducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches
+}
+
+function smooth(edge0: number, edge1: number, value: number) {
+  const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)))
+  return t * t * (3 - 2 * t)
 }
 
 export function Dock({
@@ -46,67 +36,85 @@ export function Dock({
   onChange: (tab: Tab) => void
 }) {
   const dockRef = useRef<HTMLElement>(null)
+  const pillRef = useRef<HTMLDivElement>(null)
   const lensRef = useRef<HTMLDivElement>(null)
+  const tabRef = useRef(tab)
   const fromPointer = useRef(false)
   const raf = useRef(0)
   const live = useRef({
+    ready: false,
     dragging: false,
-    targetX: 0,
-    homeX: 0,
     x: 0,
     vx: 0,
-    scale: 0.58,
-    scaleV: 0,
-    targetScale: 0.58,
-    opacity: 0,
-    inner: 1,
-    innerV: 0,
-    targetInner: 1,
-    warp: 0,
-    flat: 0,
-    flatV: 0,
-    targetFlat: 0,
-    melt: false,
+    targetX: 0,
+    lift: 0,
+    liftV: 0,
     hot: -1,
   })
 
-  function paint() {
-    const lens = lensRef.current
+  function centers() {
     const dock = dockRef.current
-    const motion = live.current
-    if (!lens || !dock) return
-    const rect = dock.getBoundingClientRect()
-    lens.style.opacity = motion.opacity.toFixed(3)
-    lens.style.visibility = motion.opacity < 0.02 ? "hidden" : "visible"
-    lens.style.setProperty("--warp", Math.min(1, motion.warp / 14).toFixed(3))
-    const flow = Math.min(0.42, Math.abs(motion.vx) * 0.022)
-    const tilt = Math.max(-9, Math.min(9, motion.vx * 0.32))
-    const sx = motion.scale * (1 + flow + motion.flat * 0.95)
-    const sy = motion.scale * (1 - flow * 0.4) * (1 - motion.flat * 0.7)
-    lens.style.transform = `translate3d(${motion.x - LENS_W / 2}px, -42%, 0) rotate(${tilt}deg) scale(${sx}, ${sy})`
-    lens.style.borderRadius = droplet(motion.vx, motion.flat, motion.opacity)
+    if (!dock) return []
+    const left = dock.getBoundingClientRect().left
+    return Array.from(dock.querySelectorAll<HTMLElement>("button")).map((button) => {
+      const box = button.getBoundingClientRect()
+      return box.left + box.width / 2 - left
+    })
+  }
 
-    const skew = Math.max(-9, Math.min(9, motion.vx * 0.34))
-    const squash = 1 - Math.min(0.08, Math.abs(motion.vx) * 0.006)
-    const ca = 2.2 + Math.min(5.5, Math.abs(motion.vx) * 0.32)
-    const base = `scale(${motion.inner}) scaleY(${squash}) skewX(${skew}deg)`
-    const focusY = rect.height * 0.42
+  function activeIndex() {
+    return Math.max(0, items.findIndex((item) => item.id === tabRef.current))
+  }
+
+  function paint() {
+    const dock = dockRef.current
+    const pill = pillRef.current
+    const lens = lensRef.current
+    if (!dock || !pill || !lens) return
+    const motion = live.current
+    const rect = dock.getBoundingClientRect()
+    const buttons = Array.from(dock.querySelectorAll<HTMLElement>("button"))
+    const tabW = buttons[0]?.getBoundingClientRect().width ?? rect.width / items.length
+
+    const up = Math.max(0, motion.lift)
+    const down = Math.max(0, -motion.lift)
+    const stretch = Math.min(0.3, Math.abs(motion.vx) * 0.02) * Math.min(1, up + 0.35)
+    let w = tabW - 6 + 50 * up
+    let h = rect.height - 10 + 18 * up
+    w *= (1 + stretch) * (1 + down * 0.55)
+    h *= (1 - stretch * 0.45) * (1 - down * 0.4)
+
+    const place = `translate3d(${(motion.x - w / 2).toFixed(2)}px, -50%, 0)`
+    const glass = smooth(0.06, 0.62, up)
+
+    pill.style.width = `${w}px`
+    pill.style.height = `${h}px`
+    pill.style.transform = place
+    pill.style.opacity = (1 - glass).toFixed(3)
+
+    lens.style.width = `${w}px`
+    lens.style.height = `${h}px`
+    lens.style.transform = place
+    lens.style.opacity = glass.toFixed(3)
+    lens.style.visibility = glass < 0.01 ? "hidden" : "visible"
+    dock.style.setProperty("--press", Math.min(1.2, up).toFixed(3))
+
+    const focusY = rect.height / 2
+    const shear = Math.max(-6, Math.min(6, motion.vx * 0.22))
+    const fringe = (0.6 + Math.min(1.6, Math.abs(motion.vx) * 0.1)) * Math.sign(motion.vx || 1)
     lens.querySelectorAll<HTMLElement>(".lens-clone").forEach((node) => {
-      const shift = Number(node.dataset.shift || 0)
+      const k = Number(node.dataset.mag || 1)
+      const side = Number(node.dataset.side || 0)
+      const mag = (1 + (MAG - 1) * up) * (1 + (k - 1) * up)
       node.style.width = `${rect.width}px`
       node.style.height = `${rect.height}px`
-      node.style.left = `${LENS_W / 2 - motion.x}px`
-      node.style.top = `${LENS_H / 2 - focusY}px`
+      node.style.left = `${w / 2 - motion.x}px`
+      node.style.top = `${h / 2 - focusY}px`
       node.style.transformOrigin = `${motion.x}px ${focusY}px`
-      node.style.transform = shift
-        ? `translate3d(${shift * ca}px, ${shift * ca * 0.2}px, 0) ${base}`
-        : base
+      node.style.transform = `translateX(${(side * fringe).toFixed(2)}px) scale(${mag.toFixed(4)}) skewX(${shear.toFixed(2)}deg)`
     })
 
-    const sheen = lens.querySelector<HTMLElement>(".lens-sheen")
-    if (sheen) sheen.style.transform = `translate(${(-skew * 1.4).toFixed(2)}px, 0)`
-
-    const activeIndex = motion.hot >= 0 ? motion.hot : items.findIndex((item) => item.id === tab)
+    const lit = motion.hot >= 0 ? motion.hot : activeIndex()
     const tint = (node: Element, on: boolean) => {
       const color = on ? "var(--signal)" : "var(--label-2)"
       const icon = node.querySelector("svg")
@@ -118,81 +126,66 @@ export function Dock({
       if (label instanceof HTMLElement) label.style.color = color
     }
 
-    dock.querySelectorAll<HTMLElement>("button").forEach((button, index) => {
-      tint(button, index === activeIndex)
-      if (motion.opacity < 0.02) {
-        button.style.opacity = ""
-        return
-      }
+    buttons.forEach((button, index) => {
+      tint(button, index === lit)
       const box = button.getBoundingClientRect()
       const center = box.left + box.width / 2 - rect.left
-      const cover = Math.max(0, 1 - Math.abs(center - motion.x) / (LENS_W * 0.42))
-      button.style.opacity = (1 - cover * Math.min(1, motion.opacity)).toFixed(3)
+      const cover = 1 - smooth(w * 0.34, w * 0.6, Math.abs(center - motion.x))
+      button.style.opacity = glass < 0.01 ? "" : (1 - cover * glass).toFixed(3)
     })
+    lens.querySelectorAll(".lens-face").forEach((face, index) => {
+      tint(face, index % items.length === lit)
+    })
+  }
 
-    lens.querySelectorAll<HTMLElement>(".lens-face").forEach((face, index) => {
-      tint(face, index % items.length === activeIndex)
+  function settle() {
+    const motion = live.current
+    motion.x = motion.targetX
+    motion.vx = 0
+    motion.lift = 0
+    motion.liftV = 0
+    motion.hot = -1
+    paint()
+    const lit = activeIndex()
+    dockRef.current?.querySelectorAll<HTMLElement>("button").forEach((button, index) => {
+      button.style.opacity = ""
+      const color = index === lit ? "var(--signal)" : "var(--label-2)"
+      const icon = button.querySelector("svg")
+      const label = button.querySelector("span")
+      if (icon instanceof SVGElement) {
+        icon.style.removeProperty("stroke")
+        icon.style.color = color
+      }
+      if (label instanceof HTMLElement) label.style.color = color
     })
   }
 
   function frame() {
     const motion = live.current
-    const stiff = motion.dragging ? 0.32 : 0.18
-    const damp = motion.dragging ? 0.56 : 0.72
+    const stiff = motion.dragging ? 0.3 : 0.15
+    const damp = motion.dragging ? 0.6 : 0.76
     motion.vx += (motion.targetX - motion.x) * stiff
     motion.vx *= damp
     motion.x += motion.vx
 
-    motion.scaleV += (motion.targetScale - motion.scale) * 0.18
-    motion.scaleV *= 0.7
-    motion.scale += motion.scaleV
-
-    const innerStiff = motion.dragging ? 0.14 : 0.32
-    motion.innerV += (motion.targetInner - motion.inner) * innerStiff
-    motion.innerV *= motion.dragging ? 0.72 : 0.62
-    motion.inner += motion.innerV
-
-    motion.flatV += (motion.targetFlat - motion.flat) * (motion.dragging ? 0.28 : 0.14)
-    motion.flatV *= 0.72
-    motion.flat += motion.flatV
-
-    const speed = Math.abs(motion.vx)
-    const targetWarp = motion.dragging ? Math.min(18, speed * 1.15) : 0
-    motion.warp += (targetWarp - motion.warp) * 0.18
-
-    let targetOpacity = 0
-    if (motion.dragging) targetOpacity = 1
-    else if (motion.melt) {
-      const settled = motion.flat > 0.84 && Math.abs(motion.x - motion.homeX) < 8
-      targetOpacity = settled ? 0 : 1
-    }
-    motion.opacity += (targetOpacity - motion.opacity) * (motion.dragging ? 0.28 : 0.12)
+    const travelling = Math.abs(motion.targetX - motion.x) > 12
+    const targetLift = motion.dragging ? 1 : travelling ? 0.5 : 0
+    motion.liftV += (targetLift - motion.lift) * (targetLift > motion.lift ? 0.24 : 0.16)
+    motion.liftV *= 0.7
+    motion.lift += motion.liftV
 
     paint()
 
-    const alive =
+    const moving =
       motion.dragging ||
-      motion.opacity > 0.02 ||
-      Math.abs(motion.vx) > 0.15 ||
-      Math.abs(motion.scaleV) > 0.003 ||
-      Math.abs(motion.innerV) > 0.003 ||
-      Math.abs(motion.flatV) > 0.003
-    if (alive) raf.current = requestAnimationFrame(frame)
+      Math.abs(motion.vx) > 0.04 ||
+      Math.abs(motion.targetX - motion.x) > 0.3 ||
+      Math.abs(motion.liftV) > 0.002 ||
+      Math.abs(motion.lift) > 0.004
+    if (moving) raf.current = requestAnimationFrame(frame)
     else {
       raf.current = 0
-      motion.melt = false
-      motion.hot = -1
-      if (lensRef.current) lensRef.current.style.visibility = "hidden"
-      dockRef.current?.querySelectorAll<HTMLElement>("button").forEach((button) => {
-        button.style.opacity = ""
-        const icon = button.querySelector("svg")
-        const label = button.querySelector("span")
-        if (icon instanceof SVGElement) {
-          icon.style.removeProperty("color")
-          icon.style.removeProperty("stroke")
-        }
-        if (label instanceof HTMLElement) label.style.removeProperty("color")
-      })
+      settle()
     }
   }
 
@@ -200,47 +193,72 @@ export function Dock({
     if (!raf.current) raf.current = requestAnimationFrame(frame)
   }
 
+  useLayoutEffect(() => {
+    tabRef.current = tab
+    const motion = live.current
+    const target = centers()[activeIndex()]
+    if (target === undefined) return
+    motion.targetX = target
+    if (!motion.ready || reducedMotion()) {
+      motion.ready = true
+      settle()
+      return
+    }
+    if (!motion.dragging) {
+      motion.hot = activeIndex()
+      wake()
+    }
+  })
+
   useEffect(() => {
-    return () => cancelAnimationFrame(raf.current)
+    function onResize() {
+      const target = centers()[activeIndex()]
+      if (target === undefined) return
+      live.current.targetX = target
+      if (!raf.current) settle()
+    }
+    window.addEventListener("resize", onResize)
+    return () => {
+      window.removeEventListener("resize", onResize)
+      cancelAnimationFrame(raf.current)
+    }
   }, [])
 
-  function localX(clientX: number) {
-    const rect = dockRef.current?.getBoundingClientRect()
-    if (!rect || rect.width <= 0) return 0
-    return Math.max(8, Math.min(rect.width - 8, clientX - rect.left))
+  function clampX(clientX: number) {
+    const dock = dockRef.current
+    const list = centers()
+    if (!dock || list.length === 0) return 0
+    const x = clientX - dock.getBoundingClientRect().left
+    return Math.max(list[0], Math.min(list[list.length - 1], x))
   }
 
-  function indexAt(x: number) {
-    const width = dockRef.current?.getBoundingClientRect().width ?? 1
-    return Math.max(0, Math.min(items.length - 1, Math.floor((x / width) * items.length)))
+  function nearest(x: number) {
+    const list = centers()
+    let best = 0
+    list.forEach((center, index) => {
+      if (Math.abs(center - x) < Math.abs(list[best] - x)) best = index
+    })
+    return best
   }
 
   function onPointerDown(event: React.PointerEvent<HTMLElement>) {
-    if (event.button !== 0 || !phoneBar()) return
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
-    const x = localX(event.clientX)
+    if (event.button !== 0 || !phoneBar() || reducedMotion()) return
     const motion = live.current
+    const x = clampX(event.clientX)
     motion.dragging = true
-    motion.melt = false
     motion.targetX = x
-    motion.x = x
-    motion.vx = 0
-    motion.scale = Math.min(motion.scale, 0.72)
-    motion.scaleV = 0.12
-    motion.targetScale = 1
-    motion.targetInner = MAG
-    motion.targetFlat = 0
-    motion.hot = indexAt(x)
-    motion.opacity = Math.max(motion.opacity, 0.04)
+    motion.hot = nearest(x)
+    motion.liftV += 0.06
     event.currentTarget.setPointerCapture(event.pointerId)
     wake()
   }
 
   function onPointerMove(event: React.PointerEvent<HTMLElement>) {
-    if (!live.current.dragging) return
-    const x = localX(event.clientX)
-    live.current.targetX = x
-    live.current.hot = indexAt(x)
+    const motion = live.current
+    if (!motion.dragging) return
+    const x = clampX(event.clientX)
+    motion.targetX = x
+    motion.hot = nearest(x)
   }
 
   function onPointerUp(event: React.PointerEvent<HTMLElement>) {
@@ -249,17 +267,11 @@ export function Dock({
     motion.dragging = false
     const rect = dockRef.current?.getBoundingClientRect()
     if (!rect) return
-    const x = localX(event.clientX)
-    const index = indexAt(x)
     const near = Math.abs(event.clientY - (rect.top + rect.height / 2)) < rect.height * 1.6
-    const commit = near ? index : Math.max(0, items.findIndex((item) => item.id === tab))
-    motion.hot = commit
-    motion.homeX = ((commit + 0.5) * rect.width) / items.length
-    motion.targetX = motion.homeX
-    motion.targetInner = 1
-    motion.targetFlat = 1
-    motion.melt = true
-    if (near && items[index].id !== tab) {
+    const index = near ? nearest(clampX(event.clientX)) : activeIndex()
+    motion.hot = index
+    motion.targetX = centers()[index] ?? motion.targetX
+    if (items[index].id !== tabRef.current) {
       fromPointer.current = true
       onChange(items[index].id)
       window.setTimeout(() => {
@@ -273,11 +285,8 @@ export function Dock({
     const motion = live.current
     if (!motion.dragging) return
     motion.dragging = false
-    motion.melt = true
-    motion.targetInner = 1
-    motion.targetFlat = 1
-    motion.targetScale = 0.86
-    motion.homeX = motion.x
+    motion.hot = -1
+    motion.targetX = centers()[activeIndex()] ?? motion.targetX
     wake()
   }
 
@@ -308,6 +317,7 @@ export function Dock({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
     >
+      <div className="pill" ref={pillRef} aria-hidden="true" />
       {items.map((item) => {
         const active = tab === item.id
         const Icon = item.icon
@@ -340,14 +350,26 @@ export function Dock({
         )
       })}
       <div className="lens" ref={lensRef} aria-hidden="true">
-        <div className="lens-clone lens-ca" data-shift="1">
-          {faces()}
+        <div className="lens-layer">
+          <div className="lens-clone">{faces()}</div>
         </div>
-        <div className="lens-clone lens-ca" data-shift="-1">
-          {faces()}
+        <div className="lens-layer lens-edge">
+          <div className="lens-clone" data-mag="1.08">
+            {faces()}
+          </div>
         </div>
-        <div className="lens-clone">{faces()}</div>
+        <div className="lens-layer lens-ca lens-red">
+          <div className="lens-clone" data-mag="1.03" data-side="1">
+            {faces()}
+          </div>
+        </div>
+        <div className="lens-layer lens-ca lens-blue">
+          <div className="lens-clone" data-mag="1.01" data-side="-1">
+            {faces()}
+          </div>
+        </div>
         <div className="lens-sheen" />
+        <div className="lens-iris" />
         <div className="lens-rim" />
       </div>
     </nav>

@@ -18,7 +18,7 @@ fi
 echo "Conteneurs déjà lancés (inchangés, sauf kommando-web) :"
 docker ps --format 'table {{.Names}}\t{{.Image}}\t{{.Ports}}\t{{.Status}}'
 echo
-echo "Reconstruction de kommando-web. Le journal doit contenir : source 20261021-goutte"
+echo "Reconstruction de kommando-web. Le journal doit contenir : source 20261021-verre"
 docker compose -p kommando up -d --build --force-recreate --no-deps web
 echo
 echo "Kommando : http://192.168.0.103:3847"

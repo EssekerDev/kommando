@@ -261,8 +261,12 @@
   overflow: visible;
   touch-action: none;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   border-radius: 999px;
-  border: 1px solid color-mix(in oklab, white 28%, transparent);
+  border: 1px solid transparent;
+  transform: scale(calc(1 + var(--press, 0) * 0.018));
+  transform-origin: 50% 100%;
   background:
     linear-gradient(180deg, color-mix(in oklab, white 32%, transparent), transparent 46%),
     color-mix(in oklab, var(--canvas) 48%, transparent);
@@ -274,11 +278,41 @@
   -webkit-backdrop-filter: blur(40px) saturate(1.85);
 }
 
+.dock::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    172deg,
+    color-mix(in oklab, white 72%, transparent),
+    color-mix(in oklab, white 10%, transparent) 38%,
+    transparent 58%,
+    color-mix(in oklab, white 18%, transparent) 88%,
+    color-mix(in oklab, white 40%, transparent)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.dock button {
+  position: relative;
+  z-index: 1;
+}
+
 .dark .dock {
-  border-color: color-mix(in oklab, white 22%, transparent);
   background:
-    linear-gradient(180deg, color-mix(in oklab, white 34%, transparent), color-mix(in oklab, white 6%, transparent) 42%, transparent),
-    color-mix(in oklab, #1c1c1e 46%, transparent);
+    linear-gradient(180deg, color-mix(in oklab, white 14%, transparent), color-mix(in oklab, white 4%, transparent) 46%, transparent),
+    color-mix(in oklab, #1c1c1e 58%, transparent);
   box-shadow:
     inset 0 0.5px 0 color-mix(in oklab, white 62%, transparent),
     inset 0 -0.5px 0 color-mix(in oklab, black 28%, transparent),
@@ -297,50 +331,62 @@
   background: transparent;
 }
 
+.pill,
 .lens {
-  --warp: 0;
   position: absolute;
-  z-index: 4;
   top: 50%;
   left: 0;
   right: auto;
   bottom: auto;
   justify-self: start;
   align-self: start;
-  border-radius: 72% 40% 30% 64% / 66% 34% 42% 74%;
-  overflow: hidden;
+  width: 84px;
+  height: 58px;
+  border-radius: 999px;
   pointer-events: none;
-  opacity: 0;
-  isolation: isolate;
-  width: 136px;
-  height: 88px;
-  max-width: 136px;
-  max-height: 88px;
-  transform: translate3d(-40px, -42%, 0) scale(0.6);
-  background:
-    radial-gradient(ellipse 48% 30% at 28% 14%, color-mix(in oklab, white 78%, transparent), transparent 72%),
-    radial-gradient(circle at 62% 72%, color-mix(in oklab, white 8%, transparent), transparent 64%);
+  transform: translate3d(-200px, -50%, 0);
+}
+
+.pill {
+  z-index: 0;
+  background: color-mix(in oklab, var(--ink) 8%, transparent);
   box-shadow:
-    inset 0 0 0 1.25px color-mix(in oklab, white 58%, transparent),
-    inset 0 1px 0 color-mix(in oklab, white 90%, transparent),
-    inset 0 -12px 14px color-mix(in oklab, black 14%, transparent),
-    0 10px 22px color-mix(in oklab, black 20%, transparent);
-  -webkit-backdrop-filter: saturate(1.7) contrast(1.06);
-  backdrop-filter: saturate(1.7) contrast(1.06);
+    inset 0 0.5px 0 color-mix(in oklab, white 70%, transparent),
+    inset 0 -0.5px 0 color-mix(in oklab, var(--ink) 6%, transparent);
+}
+
+.dark .pill {
+  background: color-mix(in oklab, white 13%, transparent);
+  box-shadow:
+    inset 0 0.5px 0 color-mix(in oklab, white 24%, transparent),
+    inset 0 -0.5px 0 color-mix(in oklab, white 6%, transparent);
+}
+
+.lens {
+  z-index: 4;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+  isolation: isolate;
+  background: color-mix(in oklab, white 6%, transparent);
+  box-shadow:
+    inset 0 0 16px color-mix(in oklab, white 9%, transparent),
+    0 10px 26px color-mix(in oklab, black 20%, transparent),
+    0 2px 6px color-mix(in oklab, black 10%, transparent);
+  -webkit-backdrop-filter: saturate(1.6) brightness(1.05);
+  backdrop-filter: saturate(1.6) brightness(1.05);
 }
 
 .lens-clone {
   position: absolute;
+  top: 0;
+  left: 0;
   z-index: 1;
   box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   padding: 0.2rem;
   border: 1px solid transparent;
-}
-
-.lens-clone:not(.lens-ca) {
-  background: transparent;
 }
 
 .lens-face {
@@ -355,28 +401,63 @@
 .lens-label {
   max-width: 100%;
   overflow: hidden;
-  visibility: hidden;
   font-size: 10px;
-  font-weight: 560;
-  line-height: 1.1;
-  letter-spacing: -0.01em;
+  font-weight: 500;
+  letter-spacing: -0.025em;
   white-space: nowrap;
+}
+
+.lens-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.lens-edge {
+  padding: 6px;
+  filter: blur(0.3px);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
 }
 
 .lens-ca {
   z-index: 2;
-  opacity: calc(0.5 + var(--warp) * 0.35);
+  padding: 2.5px;
+  opacity: 0.5;
   mix-blend-mode: screen;
-  -webkit-mask: radial-gradient(circle, transparent 30%, #000 62%);
-  mask: radial-gradient(circle, transparent 30%, #000 62%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
 }
 
-.lens-ca[data-shift="1"] {
-  filter: sepia(1) saturate(8) hue-rotate(318deg);
+html:not(.dark) .lens-ca {
+  opacity: 0.3;
+  mix-blend-mode: multiply;
 }
 
-.lens-ca[data-shift="-1"] {
-  filter: sepia(1) saturate(8) hue-rotate(168deg);
+.lens-red svg,
+.lens-red .lens-label {
+  color: #ff453a !important;
+  stroke: #ff453a !important;
+}
+
+.lens-blue svg,
+.lens-blue .lens-label {
+  color: #40c8ff !important;
+  stroke: #40c8ff !important;
 }
 
 .lens-sheen {
@@ -385,30 +466,51 @@
   z-index: 3;
   border-radius: inherit;
   background:
-    radial-gradient(ellipse 42% 24% at 30% 16%, color-mix(in oklab, white 90%, transparent), transparent 72%),
-    radial-gradient(ellipse 36% 18% at 72% 86%, color-mix(in oklab, white 22%, transparent), transparent 70%);
-  pointer-events: none;
+    radial-gradient(ellipse 64% 30% at 50% 0%, color-mix(in oklab, white 34%, transparent), transparent 74%),
+    radial-gradient(ellipse 54% 22% at 50% 100%, color-mix(in oklab, white 14%, transparent), transparent 72%);
+}
+
+.lens-iris {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border-radius: inherit;
+  padding: 1.75px;
+  opacity: 0.72;
+  background: conic-gradient(
+    from 90deg,
+    #64d2ff,
+    transparent 14% 36%,
+    #ff6482 46%,
+    #ffd60a 52%,
+    transparent 62% 86%,
+    #bf5af2 94%,
+    #64d2ff
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
 }
 
 .lens-rim {
   position: absolute;
   inset: 0;
-  z-index: 4;
+  z-index: 5;
   border-radius: inherit;
-  padding: 3px;
-  pointer-events: none;
-  background: conic-gradient(
-    from 110deg,
-    transparent 0 8%,
-    #64d2ff 18%,
-    #0a84ff 28%,
-    transparent 40% 52%,
-    #ff453a 64%,
-    #ffd60a 72%,
-    #bf5af2 82%,
-    transparent 92% 100%
+  padding: 1.25px;
+  background: linear-gradient(
+    165deg,
+    color-mix(in oklab, white 95%, transparent),
+    color-mix(in oklab, white 22%, transparent) 30%,
+    color-mix(in oklab, white 6%, transparent) 52%,
+    color-mix(in oklab, white 30%, transparent) 78%,
+    color-mix(in oklab, white 75%, transparent)
   );
-  opacity: calc(0.8 + var(--warp) * 0.2);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -586,6 +688,7 @@
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
+    transform: none;
   }
 
   .dock button {
@@ -606,6 +709,8 @@
     background: color-mix(in oklab, var(--signal) 16%, transparent);
   }
 
+  .dock::before,
+  .pill,
   .lens {
     display: none;
   }
